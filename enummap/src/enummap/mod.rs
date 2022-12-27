@@ -64,6 +64,16 @@ where
     }
 }
 
+impl<'a, K, V> Default for EnumMap<'a, K, V>
+where
+    K: Enumerated,
+{
+    /// Constructs a new instance, capable of holding all values of key `K` without further resizing.
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
