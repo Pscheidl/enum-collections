@@ -1,5 +1,6 @@
 mod enummap;
 
+pub use crate::enummap::EnumMap;
 pub use crate::enummap::Enumerated;
 pub use enummap_macros::enummap;
 
@@ -12,13 +13,13 @@ mod tests {
         use crate::Enumerated;
 
         #[enummap]
-        enum Letters {
+        enum Letter {
             A,
             B,
         }
 
-        assert_eq!(0, Letters::A.position());
-        assert_eq!(1, Letters::B.position());
-        assert_eq!(2, Letters::len());
+        assert_eq!(0, Letter::A.position());
+        assert_eq!(1, Letter::B.position());
+        assert_eq!(2, Letter::len());
     }
 }
