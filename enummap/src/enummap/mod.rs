@@ -62,6 +62,11 @@ where
     pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = Some(value);
     }
+
+    /// Removes value stored under given key. Further `get` operations are going to return `None`.
+    pub fn remove(&mut self, key: K) {
+        self.values[key.position()] = None;
+    }
 }
 
 impl<'a, K, V> Default for EnumMap<'a, K, V>

@@ -31,6 +31,13 @@ fn enummap_insert(criterion: &mut Criterion) {
     });
 }
 
+fn enummap_remove(criterion: &mut Criterion) {
+    let mut enum_map: EnumMap<Letter, u8> = EnumMap::new();
+    criterion.bench_function("EnumMap remove", |bencher| {
+        bencher.iter(|| enum_map.remove(black_box(Letter::A)))
+    });
+}
+
 fn std_hashmap_get(criterion: &mut Criterion) {
     let mut hashmap: HashMap<Letter, u8> = HashMap::new();
     hashmap.insert(Letter::A, 1);
@@ -46,11 +53,20 @@ fn std_hashmap_insert(criterion: &mut Criterion) {
     });
 }
 
+fn std_hashmap_remove(criterion: &mut Criterion) {
+    let mut hashmap: HashMap<Letter, u8> = HashMap::new();
+    criterion.bench_function("std::collections::HashMap remove", |bencher| {
+        bencher.iter(|| hashmap.remove(black_box(&Letter::A)))
+    });
+}
+
 criterion_group!(
     benches,
     enummap_get,
     std_hashmap_get,
     enummap_insert,
-    std_hashmap_insert
+    std_hashmap_insert,
+    enummap_remove,
+    std_hashmap_remove,
 );
 criterion_main!(benches);
