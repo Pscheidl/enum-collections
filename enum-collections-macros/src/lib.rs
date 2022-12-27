@@ -7,7 +7,7 @@ use syn::{
 /// Creates `enum_map::Enumerated` implementation for the underlying Enum.
 /// Also derives Copy and Clone.
 #[proc_macro_attribute]
-pub fn enummap(_args: TokenStream, input: TokenStream) -> TokenStream {
+pub fn enum_collections(_args: TokenStream, input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let generics = &input.generics;
     let name = &input.ident;

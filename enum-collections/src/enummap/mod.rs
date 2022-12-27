@@ -9,8 +9,8 @@ use crate::Enumerated;
 /// A key-value map optimized for Enums used as keys.
 ///
 /// ```
-/// use enum_collections::{enummap, EnumMap, Enumerated};
-/// #[enummap]
+/// use enum_collections::{enum_collections, EnumMap, Enumerated};
+/// #[enum_collections]
 /// enum Letter {
 ///     A,
 ///     B,
@@ -81,11 +81,11 @@ where
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
-    use enum_collections_macros::enummap;
+    use enum_collections_macros::enum_collections;
 
     use super::EnumMap;
 
-    #[enummap]
+    #[enum_collections]
     enum Letter {
         A,
         B,

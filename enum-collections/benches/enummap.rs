@@ -1,10 +1,10 @@
 use std::{collections::HashMap, hash::Hash};
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use enum_collections::{enummap, EnumMap, Enumerated};
+use enum_collections::{enum_collections, EnumMap, Enumerated};
 
 #[derive(Eq, PartialEq, Hash)]
-#[enummap]
+#[enum_collections]
 #[allow(dead_code)]
 enum Letter {
     A,

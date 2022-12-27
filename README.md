@@ -7,7 +7,7 @@ Enum Map is a special case of a Hash Map, with better **computational complexity
 
 ```rust
 use enum_collections::{enummap, EnumMap, Enumerated};
-#[enummap]
+#[enum_collections]
 enum Letter {
     A,
     B,

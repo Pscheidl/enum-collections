@@ -3,17 +3,16 @@ mod enummap;
 
 pub use crate::enumerated::Enumerated;
 pub use crate::enummap::EnumMap;
-pub use enum_collections_macros::enummap;
+pub use enum_collections_macros::enum_collections;
 
 #[cfg(test)]
 mod tests {
-    use crate::enummap;
+    use crate::Enumerated;
+    use enum_collections_macros::enum_collections;
 
     #[test]
     fn test() {
-        use crate::Enumerated;
-
-        #[enummap]
+        #[enum_collections]
         enum Letter {
             A,
             B,
