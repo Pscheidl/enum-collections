@@ -34,7 +34,7 @@ where
         self.values[key.position()].as_ref()
     }
 
-    pub fn insert(&mut self, key: &K, value: V) {
+    pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = Some(value);
     }
 }
@@ -62,7 +62,7 @@ mod tests {
     #[test]
     fn inserts() {
         let mut enum_map = EnumMap::<Letter, i32>::new();
-        enum_map.insert(&Letter::A, 42);
+        enum_map.insert(Letter::A, 42);
         assert_eq!(Some(&42), enum_map.get(Letter::A));
         assert_eq!(None, enum_map.get(Letter::B));
     }
