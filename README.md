@@ -20,7 +20,7 @@ assert_eq!(Some(&42u8), map.get(Letter::A))
 
 ## Benchmarks
 
-There are single-threaded benchmarks for the `get` and `insert` operations in [enum-collections/benches](enum-collections/benches/). Invoke `cargo bench` to run them.
+There are single-threaded benchmarks for the `get`, `insert` and `remove` operations in [enum-collections/benches](enum-collections/benches/). Invoke `cargo bench` to run them.
 
 ```
 NAME                                     lower bound | est | upper bound
