@@ -7,6 +7,20 @@ use std::{
 
 pub use enumerated::Enumerated;
 
+///
+///
+/// ```
+/// use enum_map::{enummap, EnumMap, Enumerated};
+/// #[enummap]
+/// enum Letter {
+///     A,
+///     B,
+/// }
+///
+/// let mut map: EnumMap<Letter, u8> = EnumMap::new();
+/// map.insert(Letter::A, 42);
+/// assert_eq!(Some(&42u8), map.get(Letter::A))
+///```
 #[allow(dead_code)]
 pub struct EnumMap<'a, K, V>
 where
@@ -65,5 +79,19 @@ mod tests {
         enum_map.insert(Letter::A, 42);
         assert_eq!(Some(&42), enum_map.get(Letter::A));
         assert_eq!(None, enum_map.get(Letter::B));
+    }
+
+    #[test]
+    fn test() {
+        use crate::{enummap, EnumMap, Enumerated};
+        #[enummap]
+        enum Letter {
+            A,
+            B,
+        }
+
+        let mut map: EnumMap<Letter, u8> = EnumMap::new();
+        map.insert(Letter::A, 42);
+        assert_eq!(Some(&42u8), map.get(Letter::A))
     }
 }
