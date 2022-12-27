@@ -1,3 +1,4 @@
 pub trait Enumerated {
-    fn value() -> usize;
+    fn position(&self) -> usize;
+    fn len() -> usize;
 }
