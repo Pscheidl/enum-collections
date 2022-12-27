@@ -1,11 +1,10 @@
-mod enumerated;
 use std::{
     alloc::{alloc_zeroed, Layout},
     marker::PhantomData,
     slice::from_raw_parts_mut,
 };
 
-pub use enumerated::Enumerated;
+use crate::Enumerated;
 
 /// A key-value map optimized for Enums used as keys.
 ///
