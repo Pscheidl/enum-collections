@@ -10,7 +10,7 @@ pub use enumerated::Enumerated;
 /// A key-value map optimized for Enums used as keys.
 ///
 /// ```
-/// use enum_map::{enummap, EnumMap, Enumerated};
+/// use enum_collections::{enummap, EnumMap, Enumerated};
 /// #[enummap]
 /// enum Letter {
 ///     A,
@@ -82,7 +82,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
-    use enummap_macros::enummap;
+    use enum_collections_macros::enummap;
 
     use super::EnumMap;
 

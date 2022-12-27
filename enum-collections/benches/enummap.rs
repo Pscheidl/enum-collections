@@ -1,7 +1,7 @@
 use std::{collections::HashMap, hash::Hash};
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use enum_map::{enummap, EnumMap, Enumerated};
+use enum_collections::{enummap, EnumMap, Enumerated};
 
 #[derive(Eq, PartialEq, Hash)]
 #[enummap]

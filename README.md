@@ -1,4 +1,4 @@
-# Enum Map for Rust
+# Enum Collections for Rust
 [![Rust](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml/badge.svg)](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml)
 
 Enum Map is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**.
@@ -6,7 +6,7 @@ Enum Map is a special case of a Hash Map, with better **computational complexity
 ## Usage
 
 ```rust
-use enum_map::{enummap, EnumMap, Enumerated};
+use enum_collections::{enummap, EnumMap, Enumerated};
 #[enummap]
 enum Letter {
     A,

@@ -2,7 +2,7 @@ mod enummap;
 
 pub use crate::enummap::EnumMap;
 pub use crate::enummap::Enumerated;
-pub use enummap_macros::enummap;
+pub use enum_collections_macros::enummap;
 
 #[cfg(test)]
 mod tests {
