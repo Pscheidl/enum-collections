@@ -3,13 +3,13 @@ name = "enum-collections"
 version = "0.1.0"
 edition = "2021"
 
-description = "Collections data structures optimized for Enum, initializable at runtime. EnumMap."
+description = "Collections data structures optimized for Enum, initializable at runtime."
 authors = ["Pavel Pscheidl <pavel2@pscheidl.cz>"]
 readme = "../README.md"
-repository = "https://github.com/Pscheidl/enum-map"
+repository = "https://github.com/Pscheidl/enum-collections"
 license = "Apache-2.0"
 keywords = ["collections", "hashmap", "enum"]
-categories = ["data-structures", "no-std"]
+categories = ["data-structures"]
 documentation = "https://docs.rs/enum-collections"
 
 [dependencies]

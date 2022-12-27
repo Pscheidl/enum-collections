@@ -6,10 +6,11 @@ edition = "2021"
 description = "Macros to make EnumCollections easy to use"
 authors = ["Pavel Pscheidl <pavel2@pscheidl.cz>"]
 readme = "../README.md"
-repository = "https://github.com/Pscheidl/enum-map"
+repository = "https://github.com/Pscheidl/enum-collections"
 license = "Apache-2.0"
 keywords = ["collections", "hashmap", "enum"]
-categories = ["data-structures", "no-std"]
+categories = ["data-structures"]
+documentation = "https://docs.rs/enum-collections-macros"
 
 
 [lib]
