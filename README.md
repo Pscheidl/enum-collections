@@ -6,16 +6,16 @@ Enum Map is a special case of a Hash Map, with better **computational complexity
 ## Usage
 
 ```rust
-        use enum_map::{enummap, EnumMap, Enumerated};
-        #[enummap]
-        enum Letter {
-            A,
-            B,
-        }
+use enum_map::{enummap, EnumMap, Enumerated};
+#[enummap]
+enum Letter {
+    A,
+    B,
+}
 
-        let mut map: EnumMap<Letter, u8> = EnumMap::new();
-        map.insert(Letter::A, 42);
-        assert_eq!(Some(&42u8), map.get(Letter::A))
+let mut map: EnumMap<Letter, u8> = EnumMap::new();
+map.insert(Letter::A, 42);
+assert_eq!(Some(&42u8), map.get(Letter::A))
 ```
 
 ## Benchmarks
