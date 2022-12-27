@@ -23,6 +23,7 @@ assert_eq!(Some(&42u8), map.get(Letter::A))
 There are single-threaded benchmarks for the `get` and `insert` operations in [enummap/benches](enummap/benches/). Invoke `cargo bench` to run them.
 
 ```
+NAME                                     lower bound | est | upper bound
 EnumMap get                      time:   [635.02 ps 635.52 ps 636.06 ps] avg ~22x faster
 std::collections::HashMap get    time:   [13.971 ns 13.986 ns 14.002 ns]
 EnumMap insert                   time:   [947.20 ps 947.83 ps 948.52 ps] avg ~14,7x faster
