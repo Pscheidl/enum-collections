@@ -7,7 +7,7 @@ use std::{
 
 pub use enumerated::Enumerated;
 
-///
+/// A key-value map optimized for Enums used as keys.
 ///
 /// ```
 /// use enum_map::{enummap, EnumMap, Enumerated};
@@ -21,7 +21,6 @@ pub use enumerated::Enumerated;
 /// map.insert(Letter::A, 42);
 /// assert_eq!(Some(&42u8), map.get(Letter::A))
 ///```
-#[allow(dead_code)]
 pub struct EnumMap<'a, K, V>
 where
     K: Enumerated,
@@ -34,6 +33,8 @@ impl<'a, K, V> EnumMap<'a, K, V>
 where
     K: Enumerated,
 {
+    /// Creates a new [EnumMap], with pre-allocated space for all keys of the enum `K`. With the underlying array righsized,
+    /// no resizing is further required.
     pub fn new() -> Self {
         Self {
             values: unsafe {
@@ -44,10 +45,20 @@ where
         }
     }
 
+    /// Attemps to obtain a value for given `key`, returning `Some(V)` if found,
+    /// or `None` if no value has been inserted for given key yet.
+    ///
+    /// ### Args
+    /// - `key` - Instance of `K`, used to look up the corresponding value.
     pub fn get(&self, key: K) -> Option<&V> {
         self.values[key.position()].as_ref()
     }
 
+    /// Stores given `value` under the provided `key`. Overrides any existing value previously set.
+    ///
+    /// ### Args
+    /// - `key` - The instance of `K` the value inserted can be looked up for.
+    /// - `values` - Value to bind to `K`.
     pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = Some(value);
     }
@@ -79,19 +90,5 @@ mod tests {
         enum_map.insert(Letter::A, 42);
         assert_eq!(Some(&42), enum_map.get(Letter::A));
         assert_eq!(None, enum_map.get(Letter::B));
-    }
-
-    #[test]
-    fn test() {
-        use crate::{enummap, EnumMap, Enumerated};
-        #[enummap]
-        enum Letter {
-            A,
-            B,
-        }
-
-        let mut map: EnumMap<Letter, u8> = EnumMap::new();
-        map.insert(Letter::A, 42);
-        assert_eq!(Some(&42u8), map.get(Letter::A))
     }
 }
