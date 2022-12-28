@@ -1,3 +1,4 @@
+mod index;
 use std::{
     alloc::{alloc, Layout},
     marker::PhantomData,
@@ -6,7 +7,7 @@ use std::{
 
 use crate::Enumerated;
 
-/// A key-value table optimized for Enums used as keys. Initialized with `V`'s [Default] value.
+/// A key-value table optimized for Enums used as keys. Initialized with `V`'s [Default] values.
 ///
 /// ```
 /// use enum_collections::{enum_collections, EnumTable, Enumerated};
@@ -17,9 +18,9 @@ use crate::Enumerated;
 /// }
 ///
 /// let mut map: EnumTable<Letter, u8> = EnumTable::new();
-/// map.insert(Letter::A, 42);
-/// assert_eq!(&42u8, map.get(Letter::A));
-/// assert_eq!(&u8::default(), map.get(Letter::B));
+/// map[Letter::A] = 42;
+/// assert_eq!(42u8, map[Letter::A]);
+/// assert_eq!(u8::default(), map[Letter::B]);
 ///```
 pub struct EnumTable<'a, K, V>
 where
@@ -91,18 +92,18 @@ mod tests {
     use super::EnumTable;
 
     #[enum_collections]
-    enum Letter {
+    pub(super) enum Letter {
         A,
         B,
     }
 
     #[derive(Eq, PartialEq, Debug, Clone)]
-    struct Value {
+    pub(super) struct Value {
         name: String,
     }
 
     impl Value {
-        fn new(name: String) -> Self {
+        pub(super) fn new(name: String) -> Self {
             Self { name }
         }
     }

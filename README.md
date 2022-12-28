@@ -7,7 +7,7 @@ Enum Map is a special case of a Hash Map, with better **computational complexity
 
 ### EnumMap
 
-Enum Map is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Can differentiante between a missing (`Option::None`)
+EnumMap is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Can differentiante between a missing (`Option::None`)
 and set (`Option::Some`) value.
 
 ```rust
@@ -25,7 +25,7 @@ assert_eq!(Some(&42u8), map.get(Letter::A))
 
 ### EnumTable
 
-Enum Map is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Initialized with default values, can NOT differentiate between missing values
+EnumTable is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Initialized with default values, can NOT differentiate between missing values
 and values actually set.
 
 ```rust
@@ -37,9 +37,9 @@ and values actually set.
  }
 
  let mut map: EnumTable<Letter, u8> = EnumTable::new();
- map.insert(Letter::A, 42);
- assert_eq!(&42u8, map.get(Letter::A));
- assert_eq!(&u8::default(), map.get(Letter::B));
+ map[Letter::A] = 42;
+ assert_eq!(42u8, map[Letter::A]);
+ assert_eq!(u8::default(), map[Letter::B]);
 ```
 
 ## Benchmarks
@@ -62,10 +62,10 @@ std::collections::HashMap remove time:   [13.704 ns 13.737 ns 13.771 ns]
 ### EnumTable
 
 ```
-NAME                                     lower bound | est | upper bound
-EnumTable get                            time:   [485.65 ps 488.63 ps 491.59 ps] est ~0.95x faster
-Crate Enum-Map get                       time:   [465.44 ps 465.93 ps 466.43 ps]
+NAME                                             lower bound | est | upper bound
+EnumTable Index get                      time:   [460.22 ps 460.81 ps 461.41 ps] est ~1.113x faster
+Crate Enum-Map Index get                 time:   [512.16 ps 512.62 ps 513.13 ps]
 
-EnumTable insert                         time:   [676.44 ps 677.17 ps 677.92 ps] est ~0.956x faster
-Crate Enum-Map insert                    time:   [645.98 ps 647.60 ps 649.35 ps]
+EnumTable IndexMut insert                time:   [746.66 ps 747.67 ps 748.79 ps] est ~0.943x speed
+Crate Enum-Map insert                    time:   [704.81 ps 705.35 ps 705.92 ps] est ~1.057x faster
 ```
