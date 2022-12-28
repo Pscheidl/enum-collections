@@ -8,7 +8,14 @@ authors = ["Pavel Pscheidl <pavel2@pscheidl.cz>"]
 readme = "../README.md"
 repository = "https://github.com/Pscheidl/enum-collections"
 license = "Apache-2.0"
-keywords = ["collections", "hashmap", "enum"]
+keywords = [
+    "collections",
+    "hashmap",
+    "hashtable",
+    "enum",
+    "enummap",
+    "enumtable",
+]
 categories = ["data-structures"]
 documentation = "https://docs.rs/enum-collections"
 
