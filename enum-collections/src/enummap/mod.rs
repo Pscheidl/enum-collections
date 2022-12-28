@@ -1,3 +1,4 @@
+mod index;
 use std::{
     alloc::{alloc_zeroed, Layout},
     marker::PhantomData,
@@ -7,6 +8,10 @@ use std::{
 use crate::Enumerated;
 
 /// A key-value map optimized for Enums used as keys.
+///
+/// ## Examples
+///
+/// Using `get` and `insert` functions.
 ///
 /// ```
 /// use enum_collections::{enum_collections, EnumMap, Enumerated};
@@ -18,8 +23,26 @@ use crate::Enumerated;
 ///
 /// let mut map: EnumMap<Letter, u8> = EnumMap::new();
 /// map.insert(Letter::A, 42);
-/// assert_eq!(Some(&42u8), map.get(Letter::A))
-///```
+/// assert_eq!(Some(&42u8), map.get(Letter::A));
+/// map.remove(Letter::A);
+/// assert_eq!(None, map.get(Letter::A));
+/// ```
+///
+/// Using `Index` and `IndexMut` syntactic sugar.
+/// ```
+/// use enum_collections::{enum_collections, EnumMap, Enumerated};
+/// #[enum_collections]
+/// enum Letter {
+///     A,
+///     B,
+/// }
+///
+/// let mut map: EnumMap<Letter, u8> = EnumMap::new();
+/// map[Letter::A] = Some(42);
+/// assert_eq!(Some(42u8), map[Letter::A]);
+/// assert_eq!(Some(&42u8), map[Letter::A].as_ref());
+/// ```
+
 pub struct EnumMap<'a, K, V>
 where
     K: Enumerated,
@@ -89,7 +112,7 @@ mod tests {
     use super::EnumMap;
 
     #[enum_collections]
-    enum Letter {
+    pub(super) enum Letter {
         A,
         B,
     }

@@ -10,18 +10,37 @@ Enum Map is a special case of a Hash Map, with better **computational complexity
 EnumMap is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Can differentiante between a missing (`Option::None`)
 and set (`Option::Some`) value.
 
-```rust
-use enum_collections::{enummap, EnumMap, Enumerated};
-#[enum_collections]
-enum Letter {
-    A,
-    B,
-}
+Using `get` and `insert` functions.
 
-let mut map: EnumMap<Letter, u8> = EnumMap::new();
-map.insert(Letter::A, 42);
-assert_eq!(Some(&42u8), map.get(Letter::A))
+```rust
+ use enum_collections::{enum_collections, EnumMap, Enumerated};
+ #[enum_collections]
+ enum Letter {
+     A,
+     B,
+ }
+
+ let mut map: EnumMap<Letter, u8> = EnumMap::new();
+ map.insert(Letter::A, 42);
+ assert_eq!(Some(&42u8), map.get(Letter::A));
+ map.remove(Letter::A);
+ assert_eq!(None, map.get(Letter::A));
 ```
+
+Using `Index` and `IndexMut` syntactic sugar.
+ ```rust
+ use enum_collections::{enum_collections, EnumMap, Enumerated};
+ #[enum_collections]
+ enum Letter {
+     A,
+     B,
+ }
+
+ let mut map: EnumMap<Letter, u8> = EnumMap::new();
+ map[Letter::A] = Some(42);
+ assert_eq!(Some(42u8), map[Letter::A]);
+ assert_eq!(Some(&42u8), map[Letter::A].as_ref());
+ ```
 
 ### EnumTable
 
