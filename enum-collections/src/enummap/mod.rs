@@ -49,6 +49,7 @@ where
     ///
     /// ### Args
     /// - `key` - Instance of `K`, used to look up the corresponding value.
+    #[inline]
     pub fn get(&self, key: K) -> Option<&V> {
         self.values[key.position()].as_ref()
     }
@@ -58,11 +59,13 @@ where
     /// ### Args
     /// - `key` - The instance of `K` the value inserted can be looked up for.
     /// - `values` - Value to bind to `K`.
+    #[inline]
     pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = Some(value);
     }
 
     /// Removes value stored under given key. Further `get` operations are going to return `None`.
+    #[inline]
     pub fn remove(&mut self, key: K) {
         self.values[key.position()] = None;
     }

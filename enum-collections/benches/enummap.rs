@@ -62,23 +62,6 @@ fn std_hashmap_remove(criterion: &mut Criterion) {
     });
 }
 
-fn enum_map_crate_get(criterion: &mut Criterion) {
-    let mut enum_map: enum_map::EnumMap<Letter, u8> = enum_map::EnumMap::default();
-    enum_map[Letter::A] = 1;
-    criterion.bench_function("Crate Enum-Map get", |bencher| {
-        bencher.iter(|| enum_map[black_box(Letter::A)])
-    });
-}
-
-fn enum_map_crate_insert(criterion: &mut Criterion) {
-    let mut enum_map: enum_map::EnumMap<Letter, u8> = enum_map::EnumMap::default();
-    enum_map[Letter::A] = 1;
-
-    criterion.bench_function("Crate Enum-Map insert", |bencher| {
-        bencher.iter(|| enum_map[black_box(Letter::A)] = black_box(1))
-    });
-}
-
 criterion_group!(
     benches,
     enummap_get,
@@ -87,7 +70,5 @@ criterion_group!(
     std_hashmap_insert,
     enummap_remove,
     std_hashmap_remove,
-    enum_map_crate_get,
-    enum_map_crate_insert
 );
 criterion_main!(benches);

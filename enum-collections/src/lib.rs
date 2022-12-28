@@ -1,8 +1,10 @@
 mod enumerated;
 mod enummap;
+mod enumtable;
 
 pub use crate::enumerated::Enumerated;
 pub use crate::enummap::EnumMap;
+pub use crate::enumtable::EnumTable;
 pub use enum_collections_macros::enum_collections;
 
 #[cfg(test)]
