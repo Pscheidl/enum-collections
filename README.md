@@ -47,6 +47,8 @@ Using `Index` and `IndexMut` syntactic sugar.
 EnumTable is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Initialized with default values, can NOT differentiate between missing values
 and values actually set.
 
+Using Index and IndexMut syntactic sugar.
+
 ```rust
  use enum_collections::{enum_collections, EnumTable, Enumerated};
  #[enum_collections]
@@ -60,6 +62,22 @@ and values actually set.
  assert_eq!(42u8, map[Letter::A]);
  assert_eq!(u8::default(), map[Letter::B]);
 ```
+
+ Using get and insert functions.
+ 
+ ```rust
+ use enum_collections::{enum_collections, EnumTable, Enumerated};
+ #[enum_collections]
+ enum Letter {
+     A,
+     B,
+ }
+
+ let mut map: EnumTable<Letter, u8> = EnumTable::new();
+ map.insert(Letter::A, 42);
+ assert_eq!(&42u8, map.get(Letter::A));
+ assert_eq!(&u8::default(), map.get(Letter::B));
+ ```
 
 ## Benchmarks
 

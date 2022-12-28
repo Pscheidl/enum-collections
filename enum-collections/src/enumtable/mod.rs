@@ -21,7 +21,22 @@ use crate::Enumerated;
 /// map[Letter::A] = 42;
 /// assert_eq!(42u8, map[Letter::A]);
 /// assert_eq!(u8::default(), map[Letter::B]);
-///```
+/// ```
+///
+/// Using get and insert functions.
+/// ```
+/// use enum_collections::{enum_collections, EnumTable, Enumerated};
+/// #[enum_collections]
+/// enum Letter {
+///     A,
+///     B,
+/// }
+///
+/// let mut map: EnumTable<Letter, u8> = EnumTable::new();
+/// map.insert(Letter::A, 42);
+/// assert_eq!(&42u8, map.get(Letter::A));
+/// assert_eq!(&u8::default(), map.get(Letter::B));
+/// ```
 pub struct EnumTable<'a, K, V>
 where
     K: Enumerated,
