@@ -9,6 +9,9 @@ use crate::Enumerated;
 
 /// A key-value map optimized for Enums used as keys.
 ///
+/// Abstracts away the need to handle [Option] on insert/remove operations.
+/// It is faster to initialize than `EnumTable`, because `Default` value needn't be cloned for each field.
+///
 /// ## Examples
 ///
 /// Using `get` and `insert` functions.

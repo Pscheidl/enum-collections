@@ -10,6 +10,9 @@ Enum-centric data structures for Rust.
 EnumMap is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Can differentiante between a missing (`Option::None`)
 and set (`Option::Some`) value.
 
+Abstracts away the need to handle [Option] on insert/remove operations.
+It marginally is faster to initialize than `EnumTable`, because `Default` value needn't be cloned for each field.
+
 Using `get` and `insert` functions.
 
 ```rust
