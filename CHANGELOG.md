@@ -1,4 +1,12 @@
-# Versions 0.1.0 - 0.3.0 (2022-12-30)
+#  (2022-12-30) v0.4.0
+
+
+### Features
+
+* Copy enum instead of creating a reference ([16d8736](https://github.com/Pscheidl/enum-map/commit/16d8736908b7db069e6bfd43d9ad0182cb96f335))
+* derive(Enumerated) macro as an alternative to existing attribute macro ([038f4ab](https://github.com/Pscheidl/enum-map/commit/038f4abfc7a6b6adcd1b23bf7660b0ff7b62f512))
+
+#  (2022-12-30) 0.1.0 - 0.3.0 
 
 
 ### Features
