@@ -1,11 +1,10 @@
 extern crate enum_map;
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use enum_collections::{enum_collections, EnumTable, Enumerated};
+use enum_collections::{EnumTable, Enumerated};
 use enum_map::Enum;
 
-#[derive(Eq, PartialEq, Hash, Enum)] // Enum derived to benchmark against the `enum-map` crate
-#[enum_collections]
+#[derive(Enum, Enumerated)] // Enum derived to benchmark against the `enum-map` crate
 #[allow(dead_code)]
 enum Letter {
     A,

@@ -16,8 +16,8 @@ It marginally is faster to initialize than `EnumTable`, because `Default` value 
 Using `get` and `insert` functions.
 
 ```rust
- use enum_collections::{enum_collections, EnumMap, Enumerated};
- #[enum_collections]
+ use enum_collections::{EnumMap, Enumerated};
+ #[derive(Enumerated)]
  enum Letter {
      A,
      B,
@@ -32,8 +32,8 @@ Using `get` and `insert` functions.
 
 Using `Index` and `IndexMut` syntactic sugar.
  ```rust
- use enum_collections::{enum_collections, EnumMap, Enumerated};
- #[enum_collections]
+ use enum_collections::{EnumMap, Enumerated};
+ #[derive(Enumerated)]
  enum Letter {
      A,
      B,
@@ -53,8 +53,8 @@ and values actually set.
 Using Index and IndexMut syntactic sugar.
 
 ```rust
- use enum_collections::{enum_collections, EnumTable, Enumerated};
- #[enum_collections]
+ use enum_collections::{EnumTable, Enumerated};
+ #[derive(Enumerated)]
  enum Letter {
      A,
      B,
@@ -69,8 +69,8 @@ Using Index and IndexMut syntactic sugar.
  Using get and insert functions.
 
  ```rust
- use enum_collections::{enum_collections, EnumTable, Enumerated};
- #[enum_collections]
+ use enum_collections::{EnumTable, Enumerated};
+ #[derive(Enumerated)]
  enum Letter {
      A,
      B,
@@ -92,8 +92,8 @@ NAME                                     lower bound | est | upper bound
 EnumMap get                      time:   [635.02 ps 635.52 ps 636.06 ps] est ~22x faster
 std::collections::HashMap get    time:   [13.971 ns 13.986 ns 14.002 ns]
 
-EnumMap insert                   time:   [947.20 ps 947.83 ps 948.52 ps] est ~14,7x faster
-std::collections::HashMap insert time:   [13.938 ns 13.964 ns 13.994 ns]
+EnumMap insert                   time:   [890.74 ps 892.13 ps 893.66 ps] est ~15,57x faster
+std::collections::HashMap insert time:   [13.889 ns 13.895 ns 13.901 ns]
 
 EnumMap remove                   time:   [481.07 ps 481.79 ps 482.53 ps] est ~28,55x faster
 std::collections::HashMap remove time:   [13.704 ns 13.737 ns 13.771 ns]
@@ -106,6 +106,6 @@ NAME                                             lower bound | est | upper bound
 EnumTable Index get                      time:   [460.22 ps 460.81 ps 461.41 ps] est ~1.113x faster
 Crate Enum-Map Index get                 time:   [512.16 ps 512.62 ps 513.13 ps]
 
-EnumTable IndexMut insert                time:   [746.66 ps 747.67 ps 748.79 ps] est ~0.943x speed
-Crate Enum-Map insert                    time:   [704.81 ps 705.35 ps 705.92 ps] est ~1.057x faster
+EnumTable insert                         time:   [670.83 ps 671.43 ps 672.06 ps] est. ~1,06x faster
+Crate Enum-Map insert                    time:   [715.68 ps 716.34 ps 717.04 ps]
 ```

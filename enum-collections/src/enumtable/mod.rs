@@ -10,8 +10,8 @@ use crate::Enumerated;
 /// A key-value table optimized for Enums used as keys. Initialized with `V`'s [Default] values.
 ///
 /// ```
-/// use enum_collections::{enum_collections, EnumTable, Enumerated};
-/// #[enum_collections]
+/// use enum_collections::{EnumTable, Enumerated};
+/// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
 ///     B,
@@ -26,7 +26,7 @@ use crate::Enumerated;
 /// Using get and insert functions.
 /// ```
 /// use enum_collections::{enum_collections, EnumTable, Enumerated};
-/// #[enum_collections]
+/// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
 ///     B,
@@ -110,11 +110,10 @@ where
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
-    use enum_collections_macros::enum_collections;
 
     use super::EnumTable;
 
-    #[enum_collections]
+    #[derive(Enumerated)]
     pub(super) enum Letter {
         A,
         B,

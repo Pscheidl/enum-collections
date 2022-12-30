@@ -7,6 +7,7 @@ use syn::{
 /// Creates `enum_map::Enumerated` implementation for the underlying Enum.
 /// Also derives Copy and Clone.
 #[proc_macro_attribute]
+#[deprecated(since = "0.4.0", note = "Use #[derive(Enumerated)] instead")]
 pub fn enum_collections(_args: TokenStream, input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let generics = &input.generics;
@@ -25,13 +26,12 @@ pub fn enum_collections(_args: TokenStream, input: TokenStream) -> TokenStream {
     };
 
     let output = quote! {
-        #[derive(Clone, Copy)]
         #input
 
         impl #generics Enumerated for #name #generics {
 
-            fn position(&self) -> usize {
-                *self as usize
+            fn position(self) -> usize {
+                self as usize
             }
 
             fn len() -> usize{
@@ -66,8 +66,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
     let output = quote! {
         impl #generics Enumerated for #name #generics {
 
-            fn position(&self) -> usize {
-                *self as usize
+            fn position(self) -> usize {
+                self as usize
             }
 
             fn len() -> usize{

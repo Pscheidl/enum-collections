@@ -18,7 +18,7 @@ use crate::Enumerated;
 ///
 /// ```
 /// use enum_collections::{enum_collections, EnumMap, Enumerated};
-/// #[enum_collections]
+/// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
 ///     B,
@@ -33,8 +33,8 @@ use crate::Enumerated;
 ///
 /// Using `Index` and `IndexMut` syntactic sugar.
 /// ```
-/// use enum_collections::{enum_collections, EnumMap, Enumerated};
-/// #[enum_collections]
+/// use enum_collections::{EnumMap, Enumerated};
+/// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
 ///     B,
@@ -110,11 +110,10 @@ where
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
-    use enum_collections_macros::enum_collections;
 
     use super::EnumMap;
 
-    #[enum_collections]
+    #[derive(Enumerated)]
     pub(super) enum Letter {
         A,
         B,

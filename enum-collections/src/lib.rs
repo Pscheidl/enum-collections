@@ -11,11 +11,10 @@ pub use enum_collections_macros::Enumerated;
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
-    use enum_collections_macros::enum_collections;
 
     #[test]
     fn test_attribute_macro() {
-        #[enum_collections]
+        #[derive(Enumerated)]
         enum Letter {
             A,
             B,
@@ -28,7 +27,7 @@ mod tests {
 
     #[test]
     fn test_derive_macro() {
-        #[derive(Enumerated, Clone, Copy)]
+        #[derive(Enumerated)]
         enum Letter {
             A,
             B,
