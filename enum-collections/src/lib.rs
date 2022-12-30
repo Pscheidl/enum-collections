@@ -6,6 +6,7 @@ pub use crate::enumerated::Enumerated;
 pub use crate::enummap::EnumMap;
 pub use crate::enumtable::EnumTable;
 pub use enum_collections_macros::enum_collections;
+pub use enum_collections_macros::Enumerated;
 
 #[cfg(test)]
 mod tests {
@@ -13,8 +14,21 @@ mod tests {
     use enum_collections_macros::enum_collections;
 
     #[test]
-    fn test() {
+    fn test_attribute_macro() {
         #[enum_collections]
+        enum Letter {
+            A,
+            B,
+        }
+
+        assert_eq!(0, Letter::A.position());
+        assert_eq!(1, Letter::B.position());
+        assert_eq!(2, Letter::len());
+    }
+
+    #[test]
+    fn test_derive_macro() {
+        #[derive(Enumerated, Clone, Copy)]
         enum Letter {
             A,
             B,
