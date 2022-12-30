@@ -86,6 +86,14 @@ where
     pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = value
     }
+
+    /// Resets value of type `V` corresponding to `key` to its default by calling its [Default] trait implementation.
+    ///
+    /// ### Args
+    /// - `key` - The instance of `K` pointing at the slot to reset to default.
+    pub fn reset(&mut self, key: K) {
+        self.values[key.position()] = V::default();
+    }
 }
 
 impl<'a, K, V> Default for EnumTable<'a, K, V>
@@ -145,6 +153,17 @@ mod tests {
         let inserted_value = Value::new("Hello".to_string());
         enum_table.insert(Letter::A, inserted_value.clone());
         assert_eq!(&inserted_value, enum_table.get(Letter::A));
+        assert_eq!(&Value::default(), enum_table.get(Letter::B));
+    }
+
+    #[test]
+    fn reset() {
+        let mut enum_table = EnumTable::<Letter, Value>::new();
+        let inserted_value = Value::new("Hello".to_string());
+        enum_table.insert(Letter::A, inserted_value.clone());
+        assert_eq!(&inserted_value, enum_table.get(Letter::A));
+        enum_table.reset(Letter::A);
+        assert_eq!(&Value::default(), enum_table.get(Letter::A));
         assert_eq!(&Value::default(), enum_table.get(Letter::B));
     }
 }
