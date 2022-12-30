@@ -13,7 +13,7 @@ categories = ["data-structures"]
 documentation = "https://docs.rs/enum-collections"
 
 [dependencies]
-enum-collections-macros = { version = "0.1.0", path = "../enum-collections-macros" }
+enum-collections-macros = { version = "0.2.0", path = "../enum-collections-macros" }
 
 [dev-dependencies]
 criterion = "0.4.0"
