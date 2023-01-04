@@ -1,6 +1,6 @@
 mod index;
 use std::{
-    alloc::{alloc, Layout},
+    alloc::{alloc, dealloc, Layout},
     marker::PhantomData,
     slice::from_raw_parts_mut,
 };
@@ -104,6 +104,23 @@ where
     /// Constructs a new instance, capable of holding all values of key `K` without further resizing.
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl<'a, K, V> Drop for EnumTable<'a, K, V>
+where
+    K: Enumerated,
+    V: Default,
+{
+    /// The underlying memory allocated for values must be deallocated manually, as the destruction of the
+    /// fat slice pointer doesn't guarantee it.
+    fn drop(&mut self) {
+        unsafe {
+            dealloc(
+                self.values.as_ptr() as *mut u8,
+                Layout::array::<Option<V>>(K::len()).unwrap(),
+            );
+        };
     }
 }
 
