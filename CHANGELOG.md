@@ -1,3 +1,11 @@
+#  (2023-01-04) v0.5.0
+
+
+### Bug Fixes
+
+* Deallocate memory reserved for EnumMap's values on when dropped ([e3ee18b](https://github.com/Pscheidl/enum-map/commit/e3ee18b98e18b447ff15a5c78fbb770c1380dcc1))
+* Drop memory allocated by EnumMap ([86e6d23](https://github.com/Pscheidl/enum-map/commit/86e6d231065fcdf0c372e4bd7a411fccfedba74e))
+
 #  (2022-12-30) v0.4.0
 
 
