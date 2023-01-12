@@ -33,11 +33,7 @@ use crate::Enumerated;
 /// assert_eq!(&42u8, map.get(Letter::A));
 /// assert_eq!(&u8::default(), map.get(Letter::B));
 /// ```
-pub struct EnumTable<K, V>
-where
-    K: Enumerated,
-    V: Default,
-{
+pub struct EnumTable<K, V> {
     values: Box<[V]>,
     _key_phantom_data: PhantomData<K>,
 }
@@ -60,6 +56,26 @@ where
         }
     }
 
+    /// Resets value of type `V` corresponding to `key` to its default by calling its [Default] trait implementation.
+    ///
+    /// ### Args
+    /// - `key` - The instance of `K` pointing at the slot to reset to default.
+    pub fn reset(&mut self, key: K) {
+        self.values[key.position()] = V::default();
+    }
+}
+
+impl<K, V> EnumTable<K, V>
+where
+    K: Enumerated,
+{
+    pub fn from_fn(cb: impl FnMut(&K) -> V) -> Self {
+        Self {
+            values: K::VARIANTS.iter().map(cb).collect::<Vec<V>>().into(),
+            _key_phantom_data: Default::default(),
+        }
+    }
+
     /// Obtain a value for given `key`, always returning a value `V`,
     /// as the EnumTable is pre-initialized with defaults.
     ///
@@ -79,14 +95,6 @@ where
     pub fn insert(&mut self, key: K, value: V) {
         self.values[key.position()] = value
     }
-
-    /// Resets value of type `V` corresponding to `key` to its default by calling its [Default] trait implementation.
-    ///
-    /// ### Args
-    /// - `key` - The instance of `K` pointing at the slot to reset to default.
-    pub fn reset(&mut self, key: K) {
-        self.values[key.position()] = V::default();
-    }
 }
 
 impl<K, V> Default for EnumTable<K, V>
@@ -97,6 +105,16 @@ where
     /// Constructs a new instance, capable of holding all values of key `K` without further resizing.
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl<F, K, V> From<F> for EnumTable<K, V>
+where
+    K: Enumerated,
+    F: FnMut(&K) -> V,
+{
+    fn from(cb: F) -> Self {
+        Self::from_fn(cb)
     }
 }
 
