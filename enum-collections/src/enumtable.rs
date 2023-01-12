@@ -1,5 +1,5 @@
-mod index;
 use std::marker::PhantomData;
+use std::ops::{Index, IndexMut};
 
 use crate::Enumerated;
 
@@ -18,22 +18,11 @@ use crate::Enumerated;
 /// assert_eq!(42u8, map[Letter::A]);
 /// assert_eq!(u8::default(), map[Letter::B]);
 /// ```
-///
-/// Using get and insert functions.
-/// ```
-/// use enum_collections::{EnumTable, Enumerated};
-/// #[derive(Enumerated)]
-/// enum Letter {
-///     A,
-///     B,
-/// }
-///
-/// let mut map: EnumTable<Letter, u8> = EnumTable::new();
-/// map.insert(Letter::A, 42);
-/// assert_eq!(&42u8, map.get(Letter::A));
-/// assert_eq!(&u8::default(), map.get(Letter::B));
-/// ```
-pub struct EnumTable<K, V> {
+pub struct EnumTable<K, V>
+where
+    K: Enumerated,
+    V: Default,
+{
     values: Box<[V]>,
     _key_phantom_data: PhantomData<K>,
 }
@@ -65,38 +54,6 @@ where
     }
 }
 
-impl<K, V> EnumTable<K, V>
-where
-    K: Enumerated,
-{
-    pub fn from_fn(cb: impl FnMut(&K) -> V) -> Self {
-        Self {
-            values: K::VARIANTS.iter().map(cb).collect::<Vec<V>>().into(),
-            _key_phantom_data: Default::default(),
-        }
-    }
-
-    /// Obtain a value for given `key`, always returning a value `V`,
-    /// as the EnumTable is pre-initialized with defaults.
-    ///
-    /// ### Args
-    /// - `key` - Instance of `K`, used to look up the corresponding value.
-    #[inline]
-    pub fn get(&self, key: K) -> &V {
-        &self.values[key.position()]
-    }
-
-    /// Stores given `value` under the provided `key`. Overrides any existing corresponding value.
-    ///
-    /// ### Args
-    /// - `key` - The instance of `K` the value inserted can be looked up for.
-    /// - `values` - Value to bind to `K`.
-    #[inline]
-    pub fn insert(&mut self, key: K, value: V) {
-        self.values[key.position()] = value
-    }
-}
-
 impl<K, V> Default for EnumTable<K, V>
 where
     K: Enumerated,
@@ -108,18 +65,31 @@ where
     }
 }
 
-impl<F, K, V> From<F> for EnumTable<K, V>
+impl<K, V> Index<K> for EnumTable<K, V>
 where
     K: Enumerated,
-    F: FnMut(&K) -> V,
+    V: Default,
 {
-    fn from(cb: F) -> Self {
-        Self::from_fn(cb)
+    type Output = V;
+
+    fn index(&self, key: K) -> &Self::Output {
+        &self.values[key.position()]
+    }
+}
+
+impl<K, V> IndexMut<K> for EnumTable<K, V>
+where
+    K: Enumerated,
+    V: Default,
+{
+    fn index_mut(&mut self, key: K) -> &mut Self::Output {
+        &mut self.values[key.position()]
     }
 }
 
 #[cfg(test)]
 mod tests {
+
     use crate::Enumerated;
 
     use super::EnumTable;
@@ -158,22 +128,11 @@ mod tests {
     }
 
     #[test]
-    fn inserts() {
+    fn get_insert_index_trait() {
         let mut enum_table = EnumTable::<Letter, Value>::new();
         let inserted_value = Value::new("Hello".to_string());
-        enum_table.insert(Letter::A, inserted_value.clone());
-        assert_eq!(&inserted_value, enum_table.get(Letter::A));
-        assert_eq!(&Value::default(), enum_table.get(Letter::B));
-    }
-
-    #[test]
-    fn reset() {
-        let mut enum_table = EnumTable::<Letter, Value>::new();
-        let inserted_value = Value::new("Hello".to_string());
-        enum_table.insert(Letter::A, inserted_value.clone());
-        assert_eq!(&inserted_value, enum_table.get(Letter::A));
-        enum_table.reset(Letter::A);
-        assert_eq!(&Value::default(), enum_table.get(Letter::A));
-        assert_eq!(&Value::default(), enum_table.get(Letter::B));
+        enum_table[Letter::A] = inserted_value.clone();
+        assert_eq!(&inserted_value, &enum_table[Letter::A]);
+        assert_eq!(&Value::default(), &enum_table[Letter::B]);
     }
 }

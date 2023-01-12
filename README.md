@@ -69,22 +69,6 @@ Using Index and IndexMut syntactic sugar.
  assert_eq!(u8::default(), map[Letter::B]);
 ```
 
- Using get and insert functions.
-
- ```rust
- use enum_collections::{EnumTable, Enumerated};
- #[derive(Enumerated)]
- enum Letter {
-     A,
-     B,
- }
-
- let mut map: EnumTable<Letter, u8> = EnumTable::new();
- map.insert(Letter::A, 42);
- assert_eq!(&42u8, map.get(Letter::A));
- assert_eq!(&u8::default(), map.get(Letter::B));
- ```
-
 ## Benchmarks
 
 There are single-threaded benchmarks for the `get`, `insert` and `remove` operations in [enum-collections/benches](enum-collections/benches/). Invoke `cargo bench` to run them.
