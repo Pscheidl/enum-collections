@@ -10,9 +10,9 @@
 ///     B,
 /// }
 /// ```
-pub trait Enumerated {
+pub trait Enumerated: Sized + 'static {
     /// Maps an enum to a unique position in an array.
     fn position(self) -> usize;
-    /// Total number of values in an Enum.
-    fn len() -> usize;
+    // All variants of this enum.
+    const VARIANTS: &'static [Self];
 }

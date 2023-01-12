@@ -51,7 +51,8 @@ where
     /// no resizing is further required. All values are initialized with `V`'s [Default] value.
     pub fn new() -> Self {
         Self {
-            values: (0..K::len())
+            values: K::VARIANTS
+                .iter()
                 .map(|_| V::default())
                 .collect::<Vec<V>>()
                 .into(),
@@ -133,7 +134,7 @@ mod tests {
     #[test]
     fn new_all_default() {
         let enum_table = EnumTable::<Letter, Value>::new();
-        for index in 0..Letter::len() {
+        for index in 0..Letter::VARIANTS.len() {
             assert_eq!(Value::default(), enum_table.values[index]);
         }
     }

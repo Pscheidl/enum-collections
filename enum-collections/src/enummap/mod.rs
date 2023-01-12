@@ -58,7 +58,7 @@ where
     /// no resizing is further required.
     pub fn new() -> Self {
         Self {
-            values: (0..K::len()).map(|_| None).collect::<Vec<_>>().into(),
+            values: K::VARIANTS.iter().map(|_| None).collect::<Vec<_>>().into(),
             _key_phantom_data: PhantomData {},
         }
     }
@@ -115,7 +115,7 @@ mod tests {
     #[test]
     fn new_all_none() {
         let enum_map = EnumMap::<Letter, i32>::new();
-        for index in 0..Letter::len() {
+        for index in 0..Letter::VARIANTS.len() {
             assert_eq!(None, enum_map.values[index]);
         }
     }
