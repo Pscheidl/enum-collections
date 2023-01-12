@@ -1,9 +1,5 @@
 mod index;
-use std::{
-    alloc::{alloc_zeroed, dealloc, Layout},
-    marker::PhantomData,
-    slice::from_raw_parts_mut,
-};
+use std::marker::PhantomData;
 
 use crate::Enumerated;
 
@@ -46,15 +42,15 @@ use crate::Enumerated;
 /// assert_eq!(Some(&42u8), map[Letter::A].as_ref());
 /// ```
 
-pub struct EnumMap<'a, K, V>
+pub struct EnumMap<K, V>
 where
     K: Enumerated,
 {
-    values: &'a mut [Option<V>],
+    values: Box<[Option<V>]>,
     _key_phantom_data: PhantomData<K>,
 }
 
-impl<'a, K, V> EnumMap<'a, K, V>
+impl<K, V> EnumMap<K, V>
 where
     K: Enumerated,
 {
@@ -62,10 +58,7 @@ where
     /// no resizing is further required.
     pub fn new() -> Self {
         Self {
-            values: unsafe {
-                let raw_memory = alloc_zeroed(Layout::array::<Option<V>>(K::len()).unwrap());
-                from_raw_parts_mut(raw_memory as *mut Option<V>, K::len())
-            },
+            values: (0..K::len()).map(|_| None).collect::<Vec<_>>().into(),
             _key_phantom_data: PhantomData {},
         }
     }
@@ -97,29 +90,13 @@ where
     }
 }
 
-impl<'a, K, V> Default for EnumMap<'a, K, V>
+impl<K, V> Default for EnumMap<K, V>
 where
     K: Enumerated,
 {
     /// Constructs a new instance, capable of holding all values of key `K` without further resizing.
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl<'a, K, V> Drop for EnumMap<'a, K, V>
-where
-    K: Enumerated,
-{
-    /// The underlying memory allocated for values must be deallocated manually, as the destruction of the
-    /// fat slice pointer doesn't guarantee it.
-    fn drop(&mut self) {
-        unsafe {
-            dealloc(
-                self.values.as_ptr() as *mut u8,
-                Layout::array::<Option<V>>(K::len()).unwrap(),
-            );
-        };
     }
 }
 
