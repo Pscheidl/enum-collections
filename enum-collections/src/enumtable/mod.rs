@@ -21,7 +21,7 @@ use crate::Enumerated;
 ///
 /// Using get and insert functions.
 /// ```
-/// use enum_collections::{enum_collections, EnumTable, Enumerated};
+/// use enum_collections::{EnumTable, Enumerated};
 /// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
