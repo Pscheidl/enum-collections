@@ -1,9 +1,5 @@
 mod index;
-use std::{
-    alloc::{alloc, dealloc, Layout},
-    marker::PhantomData,
-    slice::from_raw_parts_mut,
-};
+use std::marker::PhantomData;
 
 use crate::Enumerated;
 
@@ -37,16 +33,16 @@ use crate::Enumerated;
 /// assert_eq!(&42u8, map.get(Letter::A));
 /// assert_eq!(&u8::default(), map.get(Letter::B));
 /// ```
-pub struct EnumTable<'a, K, V>
+pub struct EnumTable<K, V>
 where
     K: Enumerated,
     V: Default,
 {
-    values: &'a mut [V],
+    values: Box<[V]>,
     _key_phantom_data: PhantomData<K>,
 }
 
-impl<'a, K, V> EnumTable<'a, K, V>
+impl<K, V> EnumTable<K, V>
 where
     K: Enumerated,
     V: Default,
@@ -55,14 +51,10 @@ where
     /// no resizing is further required. All values are initialized with `V`'s [Default] value.
     pub fn new() -> Self {
         Self {
-            values: unsafe {
-                let raw_memory = alloc(Layout::array::<V>(K::len()).unwrap());
-                let values_array: &'a mut [V] = from_raw_parts_mut(raw_memory as *mut V, K::len());
-                for value in values_array.iter_mut() {
-                    *value = V::default();
-                }
-                values_array
-            },
+            values: (0..K::len())
+                .map(|_| V::default())
+                .collect::<Vec<V>>()
+                .into(),
             _key_phantom_data: PhantomData {},
         }
     }
@@ -96,7 +88,7 @@ where
     }
 }
 
-impl<'a, K, V> Default for EnumTable<'a, K, V>
+impl<K, V> Default for EnumTable<K, V>
 where
     K: Enumerated,
     V: Default,
@@ -104,23 +96,6 @@ where
     /// Constructs a new instance, capable of holding all values of key `K` without further resizing.
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl<'a, K, V> Drop for EnumTable<'a, K, V>
-where
-    K: Enumerated,
-    V: Default,
-{
-    /// The underlying memory allocated for values must be deallocated manually, as the destruction of the
-    /// fat slice pointer doesn't guarantee it.
-    fn drop(&mut self) {
-        unsafe {
-            dealloc(
-                self.values.as_ptr() as *mut u8,
-                Layout::array::<Option<V>>(K::len()).unwrap(),
-            );
-        };
     }
 }
 

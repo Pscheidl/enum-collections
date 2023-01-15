@@ -34,7 +34,7 @@ pub fn enum_collections(_args: TokenStream, input: TokenStream) -> TokenStream {
                 self as usize
             }
 
-            fn len() -> usize{
+            const fn len() -> usize{
                 #enum_count
             }
 
