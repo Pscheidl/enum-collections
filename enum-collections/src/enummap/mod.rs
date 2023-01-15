@@ -13,7 +13,7 @@ use crate::Enumerated;
 /// Using `get` and `insert` functions.
 ///
 /// ```
-/// use enum_collections::{enum_collections, EnumMap, Enumerated};
+/// use enum_collections::{EnumMap, Enumerated};
 /// #[derive(Enumerated)]
 /// enum Letter {
 ///     A,
@@ -111,6 +111,7 @@ mod tests {
         A,
         B,
     }
+
     #[test]
     fn new_all_none() {
         let enum_map = EnumMap::<Letter, i32>::new();

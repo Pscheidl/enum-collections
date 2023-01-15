@@ -1,47 +1,6 @@
 use proc_macro::TokenStream;
-use syn::{
-    parse_macro_input, DeriveInput,
-    __private::{quote::quote, ToTokens},
-};
-
-/// Creates `enum_map::Enumerated` implementation for the underlying Enum.
-/// Also derives Copy and Clone.
-#[proc_macro_attribute]
-#[deprecated(since = "0.4.0", note = "Use #[derive(Enumerated)] instead")]
-pub fn enum_collections(_args: TokenStream, input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as DeriveInput);
-    let generics = &input.generics;
-    let name = &input.ident;
-    let enum_count: usize = match &input.data {
-        syn::Data::Enum(en) => en.variants.iter().count(),
-        syn::Data::Struct(_) | syn::Data::Union(_) => {
-            return quote! {
-                #input
-                compile_error!("The `enummap` macro only supports enums.");
-            }
-            .to_token_stream()
-            .to_token_stream()
-            .into();
-        }
-    };
-
-    let output = quote! {
-        #input
-
-        impl #generics Enumerated for #name #generics {
-
-            fn position(self) -> usize {
-                self as usize
-            }
-
-            const fn len() -> usize{
-                #enum_count
-            }
-
-        }
-    };
-    TokenStream::from(output.to_token_stream())
-}
+use quote::{quote, quote_spanned};
+use syn::{parse_macro_input, spanned::Spanned, DeriveInput};
 
 /// Creates `enum_map::Enumerated` implementation for the underlying Enum.
 /// Also derives Copy and Clone.
@@ -50,20 +9,24 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let generics = &input.generics;
     let name = &input.ident;
-    let enum_count: usize = match &input.data {
-        syn::Data::Enum(en) => en.variants.iter().count(),
-        syn::Data::Struct(_) | syn::Data::Union(_) => {
-            return quote! {
-                #input
-                compile_error!("The `enummap` macro only supports enums.");
+    let syn::Data::Enum(en) = input.data else {
+            return quote_spanned! {
+                input.span() => compile_error!("The `Enumerated` macro only supports enums.");
             }
-            .to_token_stream()
-            .to_token_stream()
+            .into();
+    };
+    let enum_count = en.variants.iter().count();
+
+    for variant in en.variants {
+        if let Some((_, discriminant)) = variant.discriminant {
+            return quote_spanned! {
+                discriminant.span() => compile_error!("`Enumerated` doesn't support discriminants");
+            }
             .into();
         }
-    };
+    }
 
-    let output = quote! {
+    quote! {
         impl #generics Enumerated for #name #generics {
 
             fn position(self) -> usize {
@@ -75,6 +38,6 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
             }
 
         }
-    };
-    TokenStream::from(output.to_token_stream())
+    }
+    .into()
 }
