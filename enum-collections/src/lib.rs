@@ -12,19 +12,6 @@ mod tests {
     use crate::Enumerated;
 
     #[test]
-    fn test_attribute_macro() {
-        #[derive(Enumerated)]
-        enum Letter {
-            A,
-            B,
-        }
-
-        assert_eq!(0, Letter::A.position());
-        assert_eq!(1, Letter::B.position());
-        assert_eq!(2, Letter::VARIANTS.len());
-    }
-
-    #[test]
     fn test_derive_macro() {
         #[derive(Enumerated)]
         enum Letter {
