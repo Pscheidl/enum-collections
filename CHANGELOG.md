@@ -1,5 +1,20 @@
-#  (2023-01-04) v0.5.0
+#  (2023-01-15) v0.6.0
 
+
+### Bug Fixes
+
+* Deallocate memory reserved for EnumMap's values on when dropped ([e3ee18b](https://github.com/Pscheidl/enum-map/commit/e3ee18b98e18b447ff15a5c78fbb770c1380dcc1))
+* Drop memory allocated by EnumMap ([86e6d23](https://github.com/Pscheidl/enum-map/commit/86e6d231065fcdf0c372e4bd7a411fccfedba74e))
+* Enum-collections local FS dependency + point to the current unreleased version ([2b6a07e](https://github.com/Pscheidl/enum-map/commit/2b6a07e59d44ab51e4f68cb4c95bc6bdca7a0691))
+
+
+### Features
+
+* disallow custom discriminants ([5925a72](https://github.com/Pscheidl/enum-map/commit/5925a722251a5f9bb00279e69191089e31182f2c))
+* provide array of variants ([ce6bd67](https://github.com/Pscheidl/enum-map/commit/ce6bd679a4c4af023f1e5ea6b2a7e25867fc04ed))
+
+
+#  (2023-01-04) v0.5.0
 
 ### Bug Fixes
 

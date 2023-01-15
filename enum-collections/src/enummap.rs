@@ -143,6 +143,15 @@ mod tests {
     }
 
     #[test]
+    fn index_overflow() {
+        let mut enum_map = EnumMap::<Letter, i32>::new();
+        enum_map[Letter::A] = Some(42);
+        assert_eq!(Some(42), enum_map[Letter::B]);
+        assert_eq!(Some(&42), enum_map[Letter::A].as_ref());
+        assert_eq!(None, enum_map[Letter::B]);
+    }
+
+    #[test]
     fn new_all_none() {
         let enum_map = EnumMap::<Letter, i32>::new();
         for index in 0..Letter::VARIANTS.len() {
