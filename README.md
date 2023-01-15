@@ -23,7 +23,8 @@ Using `get` and `insert` functions.
      A,
      B,
  }
-
+ assert_eq!(Letter::VARIANTS.len(), 2); // VARIANTS provided by this crate
+ 
  let mut map: EnumMap<Letter, u8> = EnumMap::new();
  map.insert(Letter::A, 42);
  assert_eq!(Some(&42u8), map.get(Letter::A));
@@ -60,6 +61,7 @@ Using Index and IndexMut syntactic sugar.
      A,
      B,
  }
+ assert_eq!(Letter::VARIANTS.len(), 2); // VARIANTS provided by this crate
 
  let mut map: EnumTable<Letter, u8> = EnumTable::new();
  map[Letter::A] = 42;

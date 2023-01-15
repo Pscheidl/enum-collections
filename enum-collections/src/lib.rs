@@ -21,7 +21,7 @@ mod tests {
 
         assert_eq!(0, Letter::A.position());
         assert_eq!(1, Letter::B.position());
-        assert_eq!(2, Letter::len());
+        assert_eq!(2, Letter::VARIANTS.len());
     }
 
     #[test]
@@ -34,6 +34,6 @@ mod tests {
 
         assert_eq!(0, Letter::A.position());
         assert_eq!(1, Letter::B.position());
-        assert_eq!(2, Letter::len());
+        assert_eq!(2, Letter::VARIANTS.len());
     }
 }

@@ -15,7 +15,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
             }
             .into();
     };
-    let enum_count = en.variants.iter().count();
+
+    let mut variants = proc_macro2::TokenStream::new();
 
     for variant in en.variants {
         if let Some((_, discriminant)) = variant.discriminant {
@@ -24,6 +25,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
             }
             .into();
         }
+        let variant_name = variant.ident;
+        variants.extend(quote! { Self::#variant_name, });
     }
 
     quote! {
@@ -33,10 +36,7 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
                 self as usize
             }
 
-            fn len() -> usize{
-                #enum_count
-            }
-
+            const VARIANTS: &'static [Self] = &[#variants];
         }
     }
     .into()
