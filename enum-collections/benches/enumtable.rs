@@ -1,7 +1,7 @@
 extern crate enum_map;
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use enum_collections::{EnumTable, Enumerated};
+use enum_collections::{EnumMap, EnumTable, Enumerated};
 use enum_map::Enum;
 
 #[derive(Enum, Enumerated)] // Enum derived to benchmark against the `enum-map` crate
@@ -65,6 +65,12 @@ fn enum_map_crate_insert(criterion: &mut Criterion) {
     });
 }
 
+fn enumtable_init(criterion: &mut Criterion) {
+    criterion.bench_function("EnumTable init", |bencher| {
+        bencher.iter(|| black_box(EnumMap::<Letter, u8>::new()))
+    });
+}
+
 criterion_group!(
     benches,
     enumtable_get,
@@ -72,6 +78,7 @@ criterion_group!(
     enumtable_index_get,
     enumtable_index_mut_insert,
     enum_map_crate_get,
-    enum_map_crate_insert
+    enum_map_crate_insert,
+    enumtable_init,
 );
 criterion_main!(benches);
