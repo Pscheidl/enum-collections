@@ -9,6 +9,8 @@
 ///     A,
 ///     B,
 /// }
+///
+/// assert_eq!(Letter::VARIANTS.len(), 2);
 /// ```
 pub trait Enumerated: Sized + 'static {
     /// Maps an enum to a unique position in an array.
