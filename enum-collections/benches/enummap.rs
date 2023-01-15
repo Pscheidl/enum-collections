@@ -61,6 +61,12 @@ fn std_hashmap_remove(criterion: &mut Criterion) {
     });
 }
 
+fn enummap_init(criterion: &mut Criterion) {
+    criterion.bench_function("EnumMap init", |bencher| {
+        bencher.iter(|| black_box(EnumMap::<Letter, u8>::new()))
+    });
+}
+
 criterion_group!(
     benches,
     enummap_get,
@@ -69,5 +75,6 @@ criterion_group!(
     std_hashmap_insert,
     enummap_remove,
     std_hashmap_remove,
+    enummap_init,
 );
 criterion_main!(benches);
