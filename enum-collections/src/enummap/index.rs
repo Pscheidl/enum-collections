@@ -2,7 +2,7 @@ use std::ops::{Index, IndexMut};
 
 use crate::{EnumMap, Enumerated};
 
-impl<'a, K, V> Index<K> for EnumMap<'a, K, V>
+impl<K, V> Index<K> for EnumMap<K, V>
 where
     K: Enumerated,
     V: Default,
@@ -14,7 +14,7 @@ where
     }
 }
 
-impl<'a, K, V> IndexMut<K> for EnumMap<'a, K, V>
+impl<K, V> IndexMut<K> for EnumMap<K, V>
 where
     K: Enumerated,
     V: Default,
