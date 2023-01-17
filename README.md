@@ -2,7 +2,9 @@
 [![Rust](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml/badge.svg)](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml)
 [![Crates.io](https://img.shields.io/crates/v/enum-collections)](https://crates.io/crates/enum-collections)
 
-Enum-centric data structures for Rust.
+[Contribution guide](CONTRIBUTING.md) | [Apache v2 license](LICENSE)
+
+Enum-centric data structures for Rust. 
 
 ## Usage
 
