@@ -1,3 +1,9 @@
+#  (2023-02-06) v0.7.0
+
+### Bug Fixes
+
+* Return `from_fn` ([5afd662](https://github.com/Pscheidl/enum-collections/commit/5afd662271d1ae68b377c613567c89ec70edcb28))
+
 #  (2023-01-15) v0.6.0
 
 
