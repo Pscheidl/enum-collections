@@ -18,13 +18,21 @@ use crate::Enumerated;
 /// assert_eq!(42u8, map[Letter::A]);
 /// assert_eq!(u8::default(), map[Letter::B]);
 /// ```
-pub struct EnumTable<K, V>
-where
-    K: Enumerated,
-    V: Default,
-{
+pub struct EnumTable<K, V> {
     values: Box<[V]>,
     _key_phantom_data: PhantomData<K>,
+}
+
+impl<K, V> EnumTable<K, V>
+where
+    K: Enumerated,
+{
+    pub fn from_fn(cb: impl FnMut(&K) -> V) -> Self {
+        Self {
+            values: K::VARIANTS.iter().map(cb).collect::<Vec<V>>().into(),
+            _key_phantom_data: Default::default(),
+        }
+    }
 }
 
 impl<K, V> EnumTable<K, V>
@@ -84,6 +92,16 @@ where
 {
     fn index_mut(&mut self, key: K) -> &mut Self::Output {
         &mut self.values[key.position()]
+    }
+}
+
+impl<F, K, V> From<F> for EnumTable<K, V>
+where
+    K: Enumerated,
+    F: FnMut(&K) -> V,
+{
+    fn from(cb: F) -> Self {
+        Self::from_fn(cb)
     }
 }
 
