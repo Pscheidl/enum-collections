@@ -1,3 +1,4 @@
+use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
 use std::ops::{Index, IndexMut};
 
@@ -105,13 +106,30 @@ where
     }
 }
 
+impl<K, V> Debug for EnumTable<K, V>
+where
+    K: Enumerated + Debug,
+    V: Debug,
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_map()
+            .entries(
+                K::VARIANTS
+                    .iter()
+                    .enumerate()
+                    .map(|(index, variant)| (variant, &self.values[index])),
+            )
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
-
+    use super::EnumTable;
     use crate::Enumerated;
 
-    use super::EnumTable;
-
+    /// No Debug derived on purpose, the crate must be usable without [std::fmt::Debug] derived
+    /// for the enum.
     #[derive(Enumerated)]
     pub(super) enum Letter {
         A,
@@ -152,5 +170,22 @@ mod tests {
         enum_table[Letter::A] = inserted_value.clone();
         assert_eq!(&inserted_value, &enum_table[Letter::A]);
         assert_eq!(&Value::default(), &enum_table[Letter::B]);
+    }
+
+    /// A dedicated enum with [std::fmt::Debug] derived, to test compilation and usability both
+    /// with and without `Debug` implemented.
+    #[derive(Enumerated, Debug)]
+    pub(super) enum LetterDebugDerived {
+        A,
+        B,
+    }
+
+    #[test]
+    fn debug() {
+        let mut enum_table = EnumTable::<LetterDebugDerived, i32>::new();
+        enum_table[LetterDebugDerived::A] = 42;
+        let debug_output = format!("{enum_table:?}");
+        let expected_output = "{A: 42, B: 0}";
+        assert_eq!(expected_output, debug_output);
     }
 }
