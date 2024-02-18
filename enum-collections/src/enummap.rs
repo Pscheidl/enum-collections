@@ -129,6 +129,7 @@ where
     V: Default + Debug,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        // Values are stored in the EnumMap's backing array in the same order as enum's variants
         f.debug_map()
             .entries(
                 K::VARIANTS
