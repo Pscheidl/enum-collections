@@ -1,3 +1,9 @@
+#  (2024-02-18) v0.8.0
+
+### Features
+
+* Implemented `Debug` trait for `EnumMap` and `EnumTable`
+
 #  (2023-02-06) v0.7.0
 
 ### Bug Fixes
