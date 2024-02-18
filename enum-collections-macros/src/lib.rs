@@ -10,10 +10,10 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
     let generics = &input.generics;
     let name = &input.ident;
     let syn::Data::Enum(en) = input.data else {
-            return quote_spanned! {
-                input.span() => compile_error!("The `Enumerated` macro only supports enums.");
-            }
-            .into();
+        return quote_spanned! {
+            input.span() => compile_error!("The `Enumerated` macro only supports enums.");
+        }
+        .into();
     };
 
     let mut variants = proc_macro2::TokenStream::new();
