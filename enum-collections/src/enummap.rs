@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
-use std::ops::{Index, IndexMut};
+use std::ops::{Deref, Index, IndexMut};
 
 use crate::Enumerated;
 
@@ -140,6 +140,23 @@ where
     }
 }
 
+impl<K, V> PartialEq<Self> for EnumMap<K, V>
+where
+    K: Enumerated,
+    V: Default + PartialEq,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.values.deref().eq(other.values.deref())
+    }
+}
+
+impl<K, V> Eq for EnumMap<K, V>
+where
+    K: Enumerated,
+    V: Default + Eq,
+{
+}
+
 #[cfg(test)]
 mod tests {
     use crate::Enumerated;
@@ -194,5 +211,16 @@ mod tests {
         let debug_output = format!("{enum_map:?}");
         let expected_output = "{A: Some(42), B: None}";
         assert_eq!(expected_output, debug_output);
+    }
+
+    #[test]
+    fn eq() {
+        let mut first_map = EnumMap::<LetterDebugDerived, i32>::new();
+        first_map.insert(LetterDebugDerived::A, 42);
+        let mut second_map = EnumMap::<LetterDebugDerived, i32>::new();
+        second_map.insert(LetterDebugDerived::A, 42);
+        assert_eq!(first_map, second_map);
+        second_map.insert(LetterDebugDerived::B, 0);
+        debug_assert_ne!(first_map, second_map);
     }
 }

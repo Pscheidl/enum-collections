@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
-use std::ops::{Index, IndexMut};
+use std::ops::{Deref, Index, IndexMut};
 
 use crate::Enumerated;
 
@@ -123,6 +123,23 @@ where
     }
 }
 
+impl<K, V> PartialEq<Self> for EnumTable<K, V>
+where
+    K: Enumerated,
+    V: Default + PartialEq,
+{
+    fn eq(&self, other: &Self) -> bool {
+        self.values.deref().eq(other.values.deref())
+    }
+}
+
+impl<K, V> Eq for EnumTable<K, V>
+where
+    K: Enumerated,
+    V: Default + Eq,
+{
+}
+
 #[cfg(test)]
 mod tests {
     use super::EnumTable;
@@ -187,5 +204,16 @@ mod tests {
         let debug_output = format!("{enum_table:?}");
         let expected_output = "{A: 42, B: 0}";
         assert_eq!(expected_output, debug_output);
+    }
+
+    #[test]
+    fn eq() {
+        let mut first_table = EnumTable::<LetterDebugDerived, i32>::new();
+        first_table[LetterDebugDerived::A] = 42;
+        let mut second_table = EnumTable::<LetterDebugDerived, i32>::new();
+        second_table[LetterDebugDerived::A] = 42;
+        assert_eq!(first_table, second_table);
+        second_table[LetterDebugDerived::B] = 42;
+        debug_assert_ne!(first_table, second_table);
     }
 }
