@@ -1,3 +1,9 @@
+#  (2024-02-18) v0.9.0
+
+### Features
+
+* Implemented `Eq` and `PartialEq` traits for `EnumTable` and `EnumMap`
+
 #  (2024-02-18) v0.8.0
 
 ### Features
