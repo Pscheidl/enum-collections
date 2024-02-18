@@ -1,3 +1,4 @@
+use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
 use std::ops::{Index, IndexMut};
 
@@ -122,11 +123,31 @@ where
     }
 }
 
+impl<K, V> Debug for EnumMap<K, V>
+where
+    K: Enumerated + Debug,
+    V: Default + Debug,
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_map()
+            .entries(
+                K::VARIANTS
+                    .iter()
+                    .enumerate()
+                    .map(|(index, variant)| (variant, &self.values[index])),
+            )
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::EnumMap;
     use crate::Enumerated;
 
+    use super::EnumMap;
+
+    /// No Debug derived on purpose, the crate must be usable without [std::fmt::Debug] derived
+    /// for the enum.
     #[derive(Enumerated)]
     pub(super) enum Letter {
         A,
@@ -156,5 +177,22 @@ mod tests {
         enum_map.insert(Letter::A, 42);
         assert_eq!(Some(&42), enum_map.get(Letter::A));
         assert_eq!(None, enum_map.get(Letter::B));
+    }
+
+    /// A dedicated enum with [std::fmt::Debug] derived, to test compilation and usability both
+    /// with and without `Debug` implemented.
+    #[derive(Enumerated, Debug)]
+    pub(super) enum LetterDebugDerived {
+        A,
+        B,
+    }
+
+    #[test]
+    fn debug() {
+        let mut enum_map = EnumMap::<LetterDebugDerived, i32>::new();
+        enum_map.insert(LetterDebugDerived::A, 42);
+        let debug_output = format!("{enum_map:?}");
+        let expected_output = "{A: Some(42), B: None}";
+        assert_eq!(expected_output, debug_output);
     }
 }
