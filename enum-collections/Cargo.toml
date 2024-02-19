@@ -12,6 +12,11 @@ keywords = ["collections", "hashmap", "hashtable", "enum", "enummap"]
 categories = ["data-structures"]
 documentation = "https://docs.rs/enum-collections"
 
+[features]
+default = ["debug", "eq"]
+debug = []
+eq = []
+
 [dependencies]
 enum-collections-macros = { path = "../enum-collections-macros", version = "0.3.0" }
 

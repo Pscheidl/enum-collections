@@ -106,6 +106,7 @@ where
     }
 }
 
+#[cfg(feature = "debug")]
 impl<K, V> Debug for EnumTable<K, V>
 where
     K: Enumerated + Debug,
@@ -124,6 +125,7 @@ where
     }
 }
 
+#[cfg(feature = "eq")]
 impl<K, V> PartialEq<Self> for EnumTable<K, V>
 where
     K: Enumerated,
@@ -134,6 +136,7 @@ where
     }
 }
 
+#[cfg(feature = "eq")]
 impl<K, V> Eq for EnumTable<K, V>
 where
     K: Enumerated,
@@ -198,6 +201,7 @@ mod tests {
         B,
     }
 
+    #[cfg(feature = "debug")]
     #[test]
     fn debug() {
         let mut enum_table = EnumTable::<LetterDebugDerived, i32>::new();
@@ -207,6 +211,7 @@ mod tests {
         assert_eq!(expected_output, debug_output);
     }
 
+    #[cfg(feature = "eq")]
     #[test]
     fn eq() {
         let mut first_table = EnumTable::<LetterDebugDerived, i32>::new();
