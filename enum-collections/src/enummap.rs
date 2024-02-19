@@ -123,6 +123,7 @@ where
     }
 }
 
+#[cfg(feature = "debug")]
 impl<K, V> Debug for EnumMap<K, V>
 where
     K: Enumerated + Debug,
@@ -141,6 +142,7 @@ where
     }
 }
 
+#[cfg(feature = "eq")]
 impl<K, V> PartialEq<Self> for EnumMap<K, V>
 where
     K: Enumerated,
@@ -151,6 +153,7 @@ where
     }
 }
 
+#[cfg(feature = "eq")]
 impl<K, V> Eq for EnumMap<K, V>
 where
     K: Enumerated,
@@ -204,7 +207,7 @@ mod tests {
         A,
         B,
     }
-
+    #[cfg(feature = "debug")]
     #[test]
     fn debug() {
         let mut enum_map = EnumMap::<LetterDebugDerived, i32>::new();
@@ -214,6 +217,7 @@ mod tests {
         assert_eq!(expected_output, debug_output);
     }
 
+    #[cfg(feature = "eq")]
     #[test]
     fn eq() {
         let mut first_map = EnumMap::<LetterDebugDerived, i32>::new();

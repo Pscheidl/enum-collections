@@ -1,6 +1,7 @@
 # Enum Collections for Rust
 [![Rust](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml/badge.svg)](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml)
 [![Crates.io](https://img.shields.io/crates/v/enum-collections)](https://crates.io/crates/enum-collections)
+[![docs.rs](https://img.shields.io/docsrs/enum-collections)](https://docs.rs/enum-collections/latest/enum_collections/)
 
 [Contribution guide](CONTRIBUTING.md) | [Apache v2 license](LICENSE)
 
@@ -70,6 +71,12 @@ Using Index and IndexMut syntactic sugar.
  assert_eq!(42u8, map[Letter::A]);
  assert_eq!(u8::default(), map[Letter::B]);
 ```
+
+## Features
+
+Portions of functionality are feature-flagged, but enabled by default. This is to allow turning this functionality off when not needed, e.g. `Debug` and `Eq` implementations.
+
+See [docs.rs](https://docs.rs/crate/enum-collections/latest/features) for details.
 
 ## Benchmarks
 
