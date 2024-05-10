@@ -16,6 +16,10 @@ documentation = "https://docs.rs/enum-collections-macros"
 [lib]
 proc-macro = true
 
+[features]
+default = []
+variants = []
+
 [dependencies]
 syn = "1.0"
 quote = "1.0"

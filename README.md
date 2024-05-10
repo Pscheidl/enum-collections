@@ -9,99 +9,150 @@ Enum-centric data structures for Rust.
 
 ## Usage
 
-### EnumMap
+A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum
+is mapped to a value. This implementation EnumMap is a a zero-cost abstraction over an array (const-sized), where the index of the array corresponds to the position of the variant in the enum.
 
-EnumMap is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Can differentiante between a missing (`Option::None`)
-and set (`Option::Some`) value.
+Because it is a thin wrapper over an array, it is stack-allocated by default. Simply [std::boxed::Box]ing it will move it to the heap, at the caller's discretion.
 
-Abstracts away the need to handle [Option] on insert/remove operations.
-It marginally is faster to initialize than `EnumTable`, because `Default` value needn't be cloned for each field.
+- Indexed by enum variants.
+- IndexMut by enum variants.
+- Debug if the enum is Debug.
+- PartialEq if the value is PartialEq. Same for Eq.
 
-Using `get` and `insert` functions.
-
-```rust
- use enum_collections::{EnumMap, Enumerated};
- #[derive(Enumerated)]
- enum Letter {
-     A,
-     B,
- }
- assert_eq!(Letter::VARIANTS.len(), 2); // VARIANTS provided by this crate
- 
- let mut map: EnumMap<Letter, u8> = EnumMap::new();
- map.insert(Letter::A, 42);
- assert_eq!(Some(&42u8), map.get(Letter::A));
- map.remove(Letter::A);
- assert_eq!(None, map.get(Letter::A));
-```
-
-Using `Index` and `IndexMut` syntactic sugar.
- ```rust
- use enum_collections::{EnumMap, Enumerated};
- #[derive(Enumerated)]
- enum Letter {
-     A,
-     B,
- }
-
- let mut map: EnumMap<Letter, u8> = EnumMap::new();
- map[Letter::A] = Some(42);
- assert_eq!(Some(42u8), map[Letter::A]);
- assert_eq!(Some(&42u8), map[Letter::A].as_ref());
- ```
-
-### EnumTable
-
-EnumTable is a special case of a Hash Map, with better **computational complexity** guarantees and overall **performance**. Initialized with default values, can NOT differentiate between missing values
-and values actually set.
-
-Using Index and IndexMut syntactic sugar.
+Debug and Eq are optional features. They are enabled by default.
 
 ```rust
- use enum_collections::{EnumTable, Enumerated};
- #[derive(Enumerated)]
- enum Letter {
-     A,
-     B,
- }
- assert_eq!(Letter::VARIANTS.len(), 2); // VARIANTS provided by this crate
+use enum_collections::{EnumMap, Enumerated};
 
- let mut map: EnumTable<Letter, u8> = EnumTable::new();
- map[Letter::A] = 42;
- assert_eq!(42u8, map[Letter::A]);
- assert_eq!(u8::default(), map[Letter::B]);
+#[derive(Enumerated)]
+pub enum Letter {
+   A,
+   B,
+}
+
+// Indexing and mutation
+let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new_default();
+assert_eq!(0, enum_map[Letter::A]);
+enum_map[Letter::A] = 42;
+assert_eq!(42, enum_map[Letter::A]);
+
+// Constructor with default values
+let enum_map_default = EnumMap::<Letter, i32, { Letter::SIZE }>::new_default();
+assert_eq!(0, enum_map_default[Letter::A]);
+assert_eq!(0, enum_map_default[Letter::B]);
+
+// Convenience constructor for optional values
+let mut enum_map_option = EnumMap::<Letter, Option<i32>, { Letter::SIZE }>::new_option();
+assert_eq!(None, enum_map_option[Letter::A]);
+assert_eq!(None, enum_map_option[Letter::B]);
+enum_map_option[Letter::A] = Some(42);
+assert_eq!(Some(42), enum_map_option[Letter::A]);
+
+// Constructor with custom initialization
+#[derive(PartialEq, Eq, Debug)]
+struct Custom;
+let enum_map = EnumMap::<Letter, Custom, { Letter::SIZE }>::new(|| Custom);
+assert_eq!(Custom, enum_map[Letter::A]);
+assert_eq!(Custom, enum_map[Letter::B]);
+
+// Custom initialization function with enum variant (key) inspection
+let enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new_inspect(|letter| {
+   match letter {
+      Letter::A => 42,
+      Letter::B => 24,
+   }
+});
+assert_eq!(42, enum_map[Letter::A]);
+assert_eq!(24, enum_map[Letter::B]);
+
+// Debug
+#[derive(Enumerated, Debug)]
+pub enum LetterDebugDerived {
+   A,
+   B,
+}
+let enum_map_debug =
+    EnumMap::<LetterDebugDerived, i32, { LetterDebugDerived::SIZE }>::new(|| 42);
+assert_eq!("{A: 42, B: 42}", format!("{:?}", enum_map_debug));
+
 ```
+
+
+Iterate over enum variants
+
+
+```rust
+#[derive(Enumerated, Debug)]
+pub enum Letter {
+   A,
+   B,
+}
+
+Letter::VARIANTS
+    .iter()
+    .for_each(|letter| println!("{:?}", letter));
+```
+
 
 ## Features
 
 Portions of functionality are feature-flagged, but enabled by default. This is to allow turning this functionality off when not needed, e.g. `Debug` and `Eq` implementations.
-
 See [docs.rs](https://docs.rs/crate/enum-collections/latest/features) for details.
 
 ## Benchmarks
 
-There are single-threaded benchmarks for the `get`, `insert` and `remove` operations in [enum-collections/benches](enum-collections/benches/). Invoke `cargo bench` to run them.
+Invoke `cargo bench` to run benchmarks. While `EnumMap` operates in pico-seconds, `std::collections::HashMap` in > 10 nanoseconds.
 
-### EnumMap
-```
-NAME                                     lower bound | est | upper bound
-EnumMap get                      time:   [635.02 ps 635.52 ps 636.06 ps] est ~22x faster
-std::collections::HashMap get    time:   [13.971 ns 13.986 ns 14.002 ns]
-
-EnumMap insert                   time:   [890.74 ps 892.13 ps 893.66 ps] est ~15,57x faster
-std::collections::HashMap insert time:   [13.889 ns 13.895 ns 13.901 ns]
-
-EnumMap remove                   time:   [481.07 ps 481.79 ps 482.53 ps] est ~28,55x faster
-std::collections::HashMap remove time:   [13.704 ns 13.737 ns 13.771 ns]
-```
-
-### EnumTable
+<details>
+<summary>Benchmark results</summary>
 
 ```
-NAME                                             lower bound | est | upper bound
-EnumTable Index get                      time:   [460.22 ps 460.81 ps 461.41 ps] est ~1.113x faster
-Crate Enum-Map Index get                 time:   [512.16 ps 512.62 ps 513.13 ps]
+EnumMap get             time:   [221.09 ps 221.59 ps 222.21 ps]
+Found 10 outliers among 100 measurements (10.00%)
+  5 (5.00%) high mild
+  5 (5.00%) high severe
 
-EnumTable insert                         time:   [670.83 ps 671.43 ps 672.06 ps] est. ~1,06x faster
-Crate Enum-Map insert                    time:   [715.68 ps 716.34 ps 717.04 ps]
+EnumMap insert          time:   [230.05 ps 233.38 ps 236.25 ps]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+
+EnumMap new: default    time:   [852.31 ps 853.28 ps 854.37 ps]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) low mild
+  1 (1.00%) high mild
+
+EnumMap new: Option::None
+                        time:   [1.7100 ns 1.7110 ns 1.7120 ns]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+
+EnumMap new: provider fn
+                        time:   [791.17 ps 792.38 ps 793.65 ps]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low mild
+  4 (4.00%) high mild
+  2 (2.00%) high severe
+
+EnumMap new: inspecting provider fn
+                        time:   [775.03 ps 776.84 ps 778.92 ps]
+Found 8 outliers among 100 measurements (8.00%)
+  4 (4.00%) high mild
+  4 (4.00%) high severe
+
+std::collections::HashMap get
+                        time:   [13.433 ns 13.484 ns 13.543 ns]
+Found 8 outliers among 100 measurements (8.00%)
+  3 (3.00%) high mild
+  5 (5.00%) high severe
+
+std::collections::HashMap insert
+                        time:   [14.094 ns 14.107 ns 14.121 ns]
+Found 4 outliers among 100 measurements (4.00%)
+  1 (1.00%) high mild
+  3 (3.00%) high severe
+
 ```
+
+</details>

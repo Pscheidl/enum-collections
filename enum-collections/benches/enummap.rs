@@ -1,11 +1,9 @@
-extern crate enum_map;
 use std::{collections::HashMap, hash::Hash};
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use enum_collections::{EnumMap, Enumerated};
-use enum_map::Enum;
 
-#[derive(Eq, PartialEq, Hash, Enum, Enumerated)] // Enum derived to benchmark against the `enum-map` crate
+#[derive(Enumerated, Eq, PartialEq, Hash)] // Enum derived to benchmark against the `enum-map` crate
 #[allow(dead_code)]
 enum Letter {
     A,
@@ -18,63 +16,74 @@ enum Letter {
 }
 
 fn enummap_get(criterion: &mut Criterion) {
-    let mut enum_map: EnumMap<Letter, u8> = EnumMap::new();
-    enum_map.insert(Letter::A, 1);
+    let mut enum_map: EnumMap<Letter, i32, { Letter::SIZE }> = EnumMap::new_default();
+    enum_map[Letter::A] = 1;
     criterion.bench_function("EnumMap get", |bencher| {
-        bencher.iter(|| enum_map.get(black_box(Letter::A)))
+        bencher.iter(|| enum_map[Letter::A]) // Tested without a black box, expected to be optimized in real-world usage
     });
 }
 
 fn enummap_insert(criterion: &mut Criterion) {
-    let mut enum_map: EnumMap<Letter, u8> = EnumMap::new();
+    let mut enum_map: EnumMap<Letter, i32, { Letter::SIZE }> = EnumMap::new_default();
+    enum_map[Letter::A] = 1;
     criterion.bench_function("EnumMap insert", |bencher| {
-        bencher.iter(|| enum_map.insert(black_box(Letter::A), black_box(1)))
+        bencher.iter(|| enum_map[Letter::A] = black_box(42))
     });
 }
 
-fn enummap_remove(criterion: &mut Criterion) {
-    let mut enum_map: EnumMap<Letter, u8> = EnumMap::new();
-    criterion.bench_function("EnumMap remove", |bencher| {
-        bencher.iter(|| enum_map.remove(black_box(Letter::A)))
+fn enummap_new_default(criterion: &mut Criterion) {
+    criterion.bench_function("EnumMap new: default", |bencher| {
+        bencher.iter(|| EnumMap::<Letter, i32, { Letter::SIZE }>::new_default())
+    });
+}
+
+fn enummap_new_option(criterion: &mut Criterion) {
+    criterion.bench_function("EnumMap new: Option::None", |bencher| {
+        bencher.iter(|| EnumMap::<Letter, Option<i32>, { Letter::SIZE }>::new_option())
+    });
+}
+
+fn enummap_new(criterion: &mut Criterion) {
+    criterion.bench_function("EnumMap new: provider fn", |bencher| {
+        bencher.iter(|| (EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42))) // Tested without a black box, expected to be optimized in real-world usage
+    });
+}
+
+fn enummap_new_inspect(criterion: &mut Criterion) {
+    criterion.bench_function("EnumMap new: inspecting provider fn", |bencher| {
+        bencher.iter(|| {
+            EnumMap::<Letter, i32, { Letter::SIZE }>::new_inspect(|variant| match variant {
+                Letter::A => 1,
+                _ => 42,
+            })
+        })
     });
 }
 
 fn std_hashmap_get(criterion: &mut Criterion) {
-    let mut hashmap: HashMap<Letter, u8> = HashMap::new();
+    let mut hashmap: HashMap<Letter, i32> = HashMap::new();
     hashmap.insert(Letter::A, 1);
     criterion.bench_function("std::collections::HashMap get", |bencher| {
-        bencher.iter(|| hashmap.get(black_box(&Letter::A)))
+        bencher.iter(|| hashmap.get(&Letter::A))
     });
 }
 
 fn std_hashmap_insert(criterion: &mut Criterion) {
-    let mut hashmap: HashMap<Letter, u8> = HashMap::new();
+    let mut hashmap: HashMap<Letter, i32> = HashMap::new();
     criterion.bench_function("std::collections::HashMap insert", |bencher| {
-        bencher.iter(|| hashmap.insert(black_box(Letter::A), black_box(1)))
-    });
-}
-
-fn std_hashmap_remove(criterion: &mut Criterion) {
-    let mut hashmap: HashMap<Letter, u8> = HashMap::new();
-    criterion.bench_function("std::collections::HashMap remove", |bencher| {
-        bencher.iter(|| hashmap.remove(black_box(&Letter::A)))
-    });
-}
-
-fn enummap_init(criterion: &mut Criterion) {
-    criterion.bench_function("EnumMap init", |bencher| {
-        bencher.iter(|| black_box(EnumMap::<Letter, u8>::new()))
+        bencher.iter(|| hashmap.insert(Letter::A, 1))
     });
 }
 
 criterion_group!(
     benches,
     enummap_get,
-    std_hashmap_get,
     enummap_insert,
+    enummap_new_default,
+    enummap_new_option,
+    enummap_new,
+    enummap_new_inspect,
+    std_hashmap_get,
     std_hashmap_insert,
-    enummap_remove,
-    std_hashmap_remove,
-    enummap_init,
 );
 criterion_main!(benches);

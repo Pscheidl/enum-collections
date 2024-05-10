@@ -14,20 +14,16 @@ documentation = "https://docs.rs/enum-collections"
 
 [features]
 default = ["debug", "eq"]
-debug = []
+debug = ["variants"] # Array of all variants must be available at runtime to generate keys in the Debug output
 eq = []
+variants = ["enum-collections-macros/variants"]
 
 [dependencies]
 enum-collections-macros = { path = "../enum-collections-macros", version = "0.3.0" }
 
 [dev-dependencies]
-criterion = "0.4.0"
-enum-map = "2.4.2"  # Benchmark
+criterion = "0.5.1"
 
 [[bench]]
 name = "enummap"
-harness = false
-
-[[bench]]
-name = "enumtable"
 harness = false
