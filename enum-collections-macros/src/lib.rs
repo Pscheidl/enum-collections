@@ -16,8 +16,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
         .into();
     };
 
+    let enum_len = en.variants.len();
     let mut variants = proc_macro2::TokenStream::new();
-
     for variant in en.variants {
         if let Some((_, discriminant)) = variant.discriminant {
             return quote_spanned! {
@@ -36,6 +36,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
                 self as usize
             }
 
+            const SIZE: usize = #enum_len;
+            #[cfg(feature = "variants")]
             const VARIANTS: &'static [Self] = &[#variants];
         }
     }
