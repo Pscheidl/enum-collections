@@ -1,3 +1,9 @@
+# (2024-05-11) v1.0.0
+
+### Features
+
+* feat!: const-sized stack-allocated enummap
+
 #  (2024-02-18) v0.9.0
 
 ### Features
