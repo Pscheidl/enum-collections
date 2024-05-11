@@ -6,8 +6,7 @@
 [Contribution guide](CONTRIBUTING.md) | [Apache v2 license](LICENSE)
 
 
-A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum
-is mapped to a value. This implementation EnumMap is a a zero-cost abstraction over an array (**const-sized**), where the index of the array corresponds to the position of the variant in the enum.
+A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum is mapped to a value. This implementation of EnumMap uses safe Rust only and is a a zero-cost abstraction over an array (**const-sized**), where the index of the array corresponds to the position of the variant in the enum.
 
 Because it is a thin wrapper over an array, it is stack-allocated by default. Simply `std::boxed::Box`ing it will move it to the heap, at the caller's discretion.
 
