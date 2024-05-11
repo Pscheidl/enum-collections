@@ -1,4 +1,4 @@
-# Enum Collections for Rust
+# EnumMap for Rust
 [![Rust](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml/badge.svg)](https://github.com/Pscheidl/enum-map/actions/workflows/rust.yml)
 [![Crates.io](https://img.shields.io/crates/v/enum-collections)](https://crates.io/crates/enum-collections)
 [![docs.rs](https://img.shields.io/docsrs/enum-collections)](https://docs.rs/enum-collections/latest/enum_collections/)
@@ -7,7 +7,7 @@
 
 
 A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum
-is mapped to a value. This implementation EnumMap is a a zero-cost abstraction over an array (const-sized), where the index of the array corresponds to the position of the variant in the enum.
+is mapped to a value. This implementation EnumMap is a a zero-cost abstraction over an array (**const-sized**), where the index of the array corresponds to the position of the variant in the enum.
 
 Because it is a thin wrapper over an array, it is stack-allocated by default. Simply `std::boxed::Box`ing it will move it to the heap, at the caller's discretion.
 
