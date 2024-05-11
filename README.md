@@ -5,9 +5,6 @@
 
 [Contribution guide](CONTRIBUTING.md) | [Apache v2 license](LICENSE)
 
-Enum-centric data structures for Rust. 
-
-## Usage
 
 A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum
 is mapped to a value. This implementation EnumMap is a a zero-cost abstraction over an array (const-sized), where the index of the array corresponds to the position of the variant in the enum.
@@ -20,6 +17,8 @@ Because it is a thin wrapper over an array, it is stack-allocated by default. Si
 - PartialEq if the value is PartialEq. Same for Eq.
 
 Debug and Eq are optional features. They are enabled by default.
+
+## Usage
 
 ```rust
 use enum_collections::{EnumMap, Enumerated};
