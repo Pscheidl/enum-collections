@@ -12,6 +12,7 @@
 ///
 /// assert_eq!(Letter::SIZE, 2);
 /// ```
+#[doc(hidden)]
 pub trait Enumerated: Sized + 'static {
     /// Maps an enum to a unique position in an array.
     fn position(self) -> usize;
