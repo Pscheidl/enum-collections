@@ -20,6 +20,8 @@ debug = ["variants"] # Array of all variants must be available at runtime to gen
 eq = []
 # Generates a static array of all variants for the EnumMap. This is required for the `Debug` implementation.
 variants = ["enum-collections-macros/variants"]
+# Implementations of the `Enumerated` trait for common data types.
+ext=[]
 
 [dependencies]
 enum-collections-macros = { path = "../enum-collections-macros", version = "1.0.0" }
