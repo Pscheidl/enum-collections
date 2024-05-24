@@ -14,8 +14,11 @@ documentation = "https://docs.rs/enum-collections"
 
 [features]
 default = ["debug", "eq"]
+# `std::fmt::Debug` implementation for EnumMap. Requires keys to be `Debug` as well.
 debug = ["variants"] # Array of all variants must be available at runtime to generate keys in the Debug output
+# `std::cmp::Eq` implementation for EnumMap. Requires keys to be `Eq` as well.
 eq = []
+# Generates a static array of all variants for the EnumMap. This is required for the `Debug` implementation.
 variants = ["enum-collections-macros/variants"]
 
 [dependencies]

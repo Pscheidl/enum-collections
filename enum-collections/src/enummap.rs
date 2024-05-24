@@ -101,7 +101,7 @@ mod macro_test {
 /// # Examples
 ///
 /// ```
-/// use enum_collections::{EnumMap, Enumerated};
+/// use enum_collections::{EnumMap, Enumerated, em_default, em};
 ///
 /// #[derive(Enumerated)]
 /// pub enum Letter {
@@ -115,6 +115,22 @@ mod macro_test {
 /// assert_eq!(0, enum_map[Letter::A]);
 /// enum_map[Letter::A] = 42;
 /// assert_eq!(42, enum_map[Letter::A]);
+///
+/// // Construction using macros
+/// // (Key type, Value type, Key=>Value pairs)
+/// let enum_map = em!(Letter, i32,  A=>42, B=>24); // All values set explicitly
+/// assert_eq!(42, enum_map[Letter::A]);
+/// assert_eq!(24, enum_map[Letter::B]);
+///
+/// // (Key type, Value type, optional Key=>Value pairs)
+/// let enum_map = em_default!(Letter, i32, A => 42); // Default used for missing values
+/// assert_eq!(42, enum_map[Letter::A]);
+/// assert_eq!(i32::default(), enum_map[Letter::B]);
+///
+/// let enum_map = em_default!(Letter, i32,); // All default
+/// assert_eq!(i32::default(), enum_map[Letter::A]);
+/// assert_eq!(i32::default(), enum_map[Letter::B]);
+///
 ///
 /// // Constructor with default values
 /// let enum_map_default = EnumMap::<Letter, i32, { Letter::SIZE }>::new_default();
