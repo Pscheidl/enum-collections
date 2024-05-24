@@ -1,3 +1,4 @@
+use crate::Enumerated;
 use std::{
     array,
     fmt::Debug,
@@ -5,7 +6,83 @@ use std::{
     ops::{Index, IndexMut},
 };
 
-use crate::Enumerated;
+///
+/// ```
+/// use enum_collections::{em, Enumerated, EnumMap};
+/// #[derive(Enumerated)]
+/// enum Letter {
+///    A,
+///    B,
+/// }
+///
+/// let enum_map = em!(Letter, i32,  A => 42, B => 24);
+/// assert_eq!(42, enum_map[Letter::A]);
+/// assert_eq!(24, enum_map[Letter::B]);
+/// ```
+///
+#[macro_export]
+macro_rules! em {
+
+    ($ktp:ty, $vtp:ty, $($x:ident=>$y:expr),* ) => {
+        enum_collections::EnumMap::<$ktp, $vtp, {<$ktp>::SIZE}>::new_inspect(|letter| {
+            match letter {
+                $(<$ktp>::$x => $y,)*
+            }
+        })
+    };
+
+}
+
+///
+/// ```
+/// use enum_collections::{em_default, Enumerated, EnumMap};
+/// #[derive(Enumerated)]
+/// enum Letter {
+///    A,
+///    B,
+/// }
+///
+/// // One non-default value
+/// let enum_map = em_default!(Letter, i32, A => 42);
+/// assert_eq!(42, enum_map[Letter::A]);
+/// assert_eq!(i32::default(), enum_map[Letter::B]);
+///
+/// // All default
+///
+/// let enum_map = em_default!(Letter, i32,);
+/// assert_eq!(i32::default(), enum_map[Letter::A]);
+/// assert_eq!(i32::default(), enum_map[Letter::B]);
+/// ```
+///
+#[macro_export]
+macro_rules! em_default {
+    ($ktp:ty, $vtp:ty, $($x:ident=>$y:expr),* ) => {
+        EnumMap::<$ktp, $vtp, {<$ktp>::SIZE}>::new_inspect(|letter| {
+            match letter {
+                $(<$ktp>::$x => $y,)*
+                _ => Default::default(),
+            }
+        })
+    };
+}
+
+#[cfg(test)]
+mod macro_test {
+    use crate::{EnumMap, Enumerated};
+
+    #[derive(Enumerated)]
+    enum Letter {
+        A,
+        B,
+    }
+
+    #[test]
+    fn test_macro() {
+        let enum_map = em_default!(Letter, i32,  A=>42);
+        assert_eq!(42, enum_map[Letter::A]);
+        assert_eq!(i32::default(), enum_map[Letter::B]);
+    }
+}
 
 /// A map of enum variants to values. EnumMap is a fixed-size map, where each variant of the enum
 /// is mapped to a value. EnumMap is a a zero-cost abstraction over an array, where the index of the array
