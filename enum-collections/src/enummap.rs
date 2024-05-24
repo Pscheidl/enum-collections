@@ -451,6 +451,45 @@ mod eq {
     impl<K: Enumerated, V: Eq, const N: usize> Eq for EnumMap<K, V, N> {}
 }
 
+/// Implements Clone for EnumMap. Clones the EnumMap by cloning each value. Requires the value to be `Clone`.
+///
+/// ```
+/// use enum_collections::{EnumMap, Enumerated};
+///
+/// #[derive(Enumerated, Debug)]
+/// pub enum Letter {
+///     A,
+///     B,
+/// }
+/// let enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+/// let cloned = enum_map.clone();
+/// assert_eq!(enum_map, cloned);
+/// ```
+impl<K: Enumerated, V: Clone, const N: usize> Clone for EnumMap<K, V, N> {
+    fn clone(&self) -> Self {
+        Self {
+            data: self.data.clone(),
+            _key: PhantomData,
+        }
+    }
+}
+
+/// Implements Copy for EnumMap, provided the value type `V` also implements `Copy`.
+///
+/// ```
+///
+/// use enum_collections::{EnumMap, Enumerated};
+/// #[derive(Enumerated, Debug)]
+/// pub enum Letter {
+///   A,
+///   B,
+/// }
+/// let enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+/// let copied = enum_map;
+/// assert_eq!(enum_map, copied);
+/// ```
+impl<K: Enumerated, V: Copy, const N: usize> Copy for EnumMap<K, V, N> {}
+
 #[cfg(test)]
 mod tests {
     use crate::enummap::EnumMap;
