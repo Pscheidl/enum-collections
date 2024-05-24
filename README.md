@@ -20,6 +20,8 @@ Debug and Eq are optional features. They are enabled by default.
 
 ## Usage
 
+Please refer to the [documentation(https://docs.rs/enum-collections/latest/enum_collections/)] for a complete list of features and more in-depth documentation.
+
 ```rust
 use enum_collections::{EnumMap, Enumerated};
 
