@@ -1,6 +1,6 @@
 [package]
 name = "enum-collections"
-version = "1.4.0"
+version = "1.4.1"
 edition = "2021"
 
 description = "Collections data structures optimized for Enum, initializable at runtime."
@@ -24,7 +24,7 @@ variants = ["enum-collections-macros/variants"]
 ext=[]
 
 [dependencies]
-enum-collections-macros = { path = "../enum-collections-macros", version = "1.0.0" }
+enum-collections-macros = { path = "../enum-collections-macros", version = "1.0.1" }
 
 [dev-dependencies]
 criterion = "0.5.1"

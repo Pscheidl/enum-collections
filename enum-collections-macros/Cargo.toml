@@ -1,6 +1,6 @@
 [package]
 name = "enum-collections-macros"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 
 description = "Macros to make EnumCollections easy to use"
