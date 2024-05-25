@@ -29,7 +29,8 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
         variants.extend(quote! { Self::#variant_name, });
     }
 
-    quote! {
+    #[cfg(feature = "variants")]
+    return quote! {
         impl #generics Enumerated for #name #generics {
 
             fn position(self) -> usize {
@@ -37,9 +38,21 @@ pub fn derive_enum_collections(input: TokenStream) -> TokenStream {
             }
 
             const SIZE: usize = #enum_len;
-            #[cfg(feature = "variants")]
             const VARIANTS: &'static [Self] = &[#variants];
         }
     }
-    .into()
+    .into();
+
+    #[cfg(not(feature = "variants"))]
+    return quote! {
+        impl #generics Enumerated for #name #generics {
+
+            fn position(self) -> usize {
+                self as usize
+            }
+
+            const SIZE: usize = #enum_len;
+        }
+    }
+    .into();
 }
