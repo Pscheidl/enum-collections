@@ -198,6 +198,26 @@ impl<K: Enumerated, V: Default, const N: usize> EnumMap<K, V, N> {
             _key: PhantomData,
         }
     }
+    /// Sets all values to `V::default()`.
+    ///
+    /// ```
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated)]
+    /// pub enum Letter {
+    ///   A,
+    ///     B,
+    /// }
+    /// let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+    /// enum_map.iter().for_each(|value| assert_eq!(42, *value));
+    /// enum_map.clear_set_default();
+    /// enum_map.iter().for_each(|value| assert_eq!(0, *value));
+    /// ```
+    ///
+    pub fn clear_set_default(&mut self) {
+        for idx in 0..self.data.len() {
+            self.data[idx] = V::default();
+        }
+    }
 }
 
 impl<K: Enumerated, V, const N: usize> EnumMap<K, Option<V>, N> {
@@ -222,6 +242,34 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, Option<V>, N> {
             _key: PhantomData,
         }
     }
+
+    /// Clears the EnumMap and sets all values to `None`.
+    ///
+    /// This function iterates over each variant of the EnumMap and sets its value to `None`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated)]
+    /// pub enum Letter {
+    ///    A,
+    ///    B,
+    /// }
+    ///
+    /// let mut enum_map = EnumMap::<Letter, Option<i32>, { Letter::SIZE }>::new_option();
+    /// enum_map[Letter::A] = Some(10);
+    /// enum_map[Letter::B] = Some(20);
+    ///
+    /// enum_map.clear_set_none();
+    /// enum_map.iter().for_each(|value| assert_eq!(None, *value));
+    ///
+    /// ```
+    pub fn clear_set_none(&mut self) {
+        for idx in 0..self.data.len() {
+            self.data[idx] = None;
+        }
+    }
 }
 
 impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
@@ -244,6 +292,30 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
         Self {
             data: array::from_fn(|_| default()),
             _key: PhantomData,
+        }
+    }
+
+    /// Iterates over each variant of the EnumMap and sets its value to the value provided by the `val_provider` function.
+    ///
+    /// Unlike [Self::new], this function does not allocate a new EnumMap.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated)]
+    /// pub enum Letter {
+    ///   A,
+    ///   B,
+    /// }
+    ///
+    /// let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+    /// enum_map.set_all(|| 24);
+    /// enum_map.iter().for_each(|value| assert_eq!(24, *value));
+    /// ```
+    pub fn set_all(&mut self, val_provider: fn() -> V) {
+        for idx in 0..self.data.len() {
+            self.data[idx] = val_provider();
         }
     }
 
