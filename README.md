@@ -23,7 +23,7 @@ Debug and Eq are optional features. They are enabled by default.
 Please refer to the [documentation](https://docs.rs/enum-collections/latest/enum_collections/) for a complete list of features and more in-depth documentation.
 
 ```rust
-use enum_collections::{EnumMap, Enumerated};
+use enum_collections::{EnumMap, Enumerated, em, em_default, em_option};
 
 #[derive(Enumerated)]
 pub enum Letter {
@@ -52,6 +52,12 @@ assert_eq!(i32::default(), enum_map[Letter::B]);
 let enum_map = em_default!(Letter, i32,); // All default
 assert_eq!(i32::default(), enum_map[Letter::A]);
 assert_eq!(i32::default(), enum_map[Letter::B]);
+
+// EnumMap of optional values `Option<V>`, value type is automatically wrapped in `Option`.
+// (Key type, Value type, optional Key=>Value pairs)
+let enum_map = em_option!(Letter, i32, A => 42);
+assert_eq!(Some(42), enum_map[Letter::A]);
+assert_eq!(None, enum_map[Letter::B]);
 
 // Constructor with default values
 let enum_map_default = EnumMap::<Letter, i32, { Letter::SIZE }>::new_default();
