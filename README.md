@@ -32,6 +32,7 @@ pub enum Letter {
 }
 
 // Indexing and mutation
+// The SIZE hint is required until [generic_const_expr](https://github.com/rust-lang/rust/issues/76560) are stabilized.
 let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new_default();
 assert_eq!(0, enum_map[Letter::A]);
 enum_map[Letter::A] = 42;
