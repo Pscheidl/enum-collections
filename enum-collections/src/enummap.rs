@@ -66,6 +66,32 @@ macro_rules! em_default {
     };
 }
 
+/// Initializes an EnumMap with `Option::None` for all variants not explicitly specified.
+///
+/// ```
+/// use enum_collections::{em_option, Enumerated, EnumMap};
+/// #[derive(Enumerated)]
+/// enum Letter {
+///   A,
+///   B,
+/// }
+///
+/// let enum_map = em_option!(Letter, i32, A => 42);
+/// assert_eq!(Some(42), enum_map[Letter::A]);
+/// assert_eq!(None, enum_map[Letter::B]);
+/// ```
+#[macro_export]
+macro_rules! em_option {
+    ($ktp:ty, $vtp:ty, $($x:ident=>$y:expr),* ) => {
+        EnumMap::<$ktp, Option<$vtp>, {<$ktp>::SIZE}>::new_inspect(|letter| {
+            match letter {
+                $(<$ktp>::$x => Some($y),)*
+                _ => None,
+            }
+        })
+    };
+}
+
 #[cfg(test)]
 mod macro_test {
     use crate::{EnumMap, Enumerated};
