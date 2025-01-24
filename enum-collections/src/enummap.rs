@@ -421,6 +421,30 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
     }
 }
 
+impl<K: Enumerated, V: Copy, const N: usize> EnumMap<K, V, N> {
+    /// Creates a new EnumMap where value of each variant is the provided value.
+    ///
+    /// ```
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated)]
+    /// pub enum Letter {
+    ///   A,
+    ///   B,
+    /// }
+    ///
+    /// let enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new_with_all(42);
+    /// assert_eq!(42, enum_map[Letter::A]);
+    /// assert_eq!(42, enum_map[Letter::B]);
+    ///
+    /// ```
+    pub const fn new_with_all(value: V) -> Self {
+        Self {
+            data: [value; N],
+            _key: PhantomData,
+        }
+    }
+}
+
 /// Allows indexing of EnumMap.
 ///
 /// ```
