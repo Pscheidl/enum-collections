@@ -19,6 +19,8 @@ mod enumerated;
 mod enummap;
 #[cfg(feature = "ext")]
 mod ext;
+#[cfg(feature = "serde")]
+mod serde;
 
 pub use crate::enumerated::Enumerated;
 pub use crate::enummap::EnumMap;

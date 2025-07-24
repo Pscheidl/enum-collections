@@ -409,7 +409,7 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
     ///
     /// ```
     #[cfg(feature = "variants")]
-    pub fn new_inspect(default: fn(&K) -> V) -> Self {
+    pub fn new_inspect(mut default: impl FnMut(&K) -> V) -> Self {
         let init_fn = |index| {
             // Finds the enum variant by its index, as the array is sorted by discriminants in ascending order.
             default(&K::VARIANTS[index])
@@ -689,6 +689,53 @@ mod tests {
             let enum_map =
                 EnumMap::<LetterDebugDerived, i32, { LetterDebugDerived::SIZE }>::new(|| 42);
             assert_eq!("{A: 42, B: 42}", format!("{:?}", enum_map));
+        }
+    }
+
+    #[cfg(feature = "serde")]
+    mod serde {
+        use serde::{Deserialize, Serialize};
+
+        use crate::{EnumMap, Enumerated};
+
+        #[derive(Enumerated, Serialize, Deserialize, PartialEq, Debug)]
+        pub(super) enum LetterSerde {
+            A,
+            B,
+        }
+
+        #[test]
+        fn serialize() {
+            let mut enum_map: EnumMap<_, Option<_>, { LetterSerde::SIZE }> = EnumMap::new_option();
+            enum_map[LetterSerde::A] = Some(10);
+            enum_map[LetterSerde::B] = Some(11);
+
+            let serialized = ron::to_string(&enum_map).unwrap();
+            assert_eq!("{A:Some(10),B:Some(11)}", serialized);
+        }
+
+        #[test]
+        fn deserialize() {
+            let str = "{A:Some(10),B:Some(11)}";
+            let enum_map: EnumMap<_, Option<_>, { LetterSerde::SIZE }> =
+                ron::from_str(str).unwrap();
+
+            let mut correct_enum_map: EnumMap<_, Option<_>, { LetterSerde::SIZE }> =
+                EnumMap::new_option();
+            correct_enum_map[LetterSerde::A] = Some(10);
+            correct_enum_map[LetterSerde::B] = Some(11);
+            assert_eq!(enum_map, correct_enum_map);
+        }
+
+        #[test]
+        fn serde() {
+            let mut enum_map: EnumMap<_, Option<_>, { LetterSerde::SIZE }> = EnumMap::new_option();
+            enum_map[LetterSerde::A] = Some(10);
+
+            let serialized = ron::to_string(&enum_map).unwrap();
+            let new_enum_map: EnumMap<_, Option<_>, { LetterSerde::SIZE }> =
+                ron::from_str(&serialized).unwrap();
+            assert_eq!(enum_map, new_enum_map);
         }
     }
 }
