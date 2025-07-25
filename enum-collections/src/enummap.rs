@@ -199,8 +199,8 @@ mod macro_test {
 ///
 /// ```
 pub struct EnumMap<K: Enumerated, V, const N: usize> {
-    data: [V; N],
-    _key: PhantomData<K>,
+    pub(crate) data: [V; N],
+    pub(crate) _key: PhantomData<K>,
 }
 
 impl<K: Enumerated, V: Default, const N: usize> EnumMap<K, V, N> {
