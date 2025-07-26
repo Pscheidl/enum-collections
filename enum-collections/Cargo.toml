@@ -1,6 +1,6 @@
 [package]
 name = "enum-collections"
-version = "1.6.0"
+version = "1.7.0"
 edition = "2021"
 
 description = "Collections data structures optimized for Enum, initializable at runtime."
