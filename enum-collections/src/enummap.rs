@@ -366,6 +366,29 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
         K::VARIANTS.iter().zip(self.data.iter())
     }
 
+    /// Mutably iterates over the EnumMap's key-value pairs. Only the values are mutable.
+    ///
+    /// ```
+    /// use std::ops::AddAssign;
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated, Debug)]
+    /// pub enum Letter {
+    ///    A,
+    ///    B,
+    /// }
+    ///
+    /// let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+    /// for (_letter, value) in enum_map.iter_kv_mut() {
+    ///    value.add_assign(10);
+    ///    assert_eq!(52, *value);
+    /// }
+    ///
+    /// ```
+    #[cfg(feature = "variants")]
+    pub fn iter_kv_mut(&mut self) -> std::iter::Zip<std::slice::Iter<'_, K>, std::slice::IterMut<'_, V>> {
+        K::VARIANTS.iter().zip(self.data.iter_mut())
+    }
+
     /// Iterates over the EnumMap's values.
     ///
     /// ```
@@ -385,6 +408,29 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
     #[cfg(feature = "variants")]
     pub fn iter(&self) -> std::slice::Iter<'_, V> {
         self.data.iter()
+    }
+
+    /// Mutably iterates over the EnumMap's values.
+    ///
+    /// ```
+    /// use std::ops::AddAssign;
+    /// use enum_collections::{EnumMap, Enumerated};
+    /// #[derive(Enumerated, Debug)]
+    /// pub enum Letter {
+    ///    A,
+    ///    B,
+    /// }
+    ///
+    /// let mut enum_map = EnumMap::<Letter, i32, { Letter::SIZE }>::new(|| 42);
+    /// for value in enum_map.iter_mut() {
+    ///    value.add_assign(10);
+    ///    assert_eq!(52, *value);
+    /// }
+    ///
+    /// ```
+    #[cfg(feature = "variants")]
+    pub fn iter_mut(&mut self) -> std::slice::IterMut<'_, V> {
+        self.data.iter_mut()
     }
 
     /// Creates a new EnumMap where value of each variant is produced by the provided function.
