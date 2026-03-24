@@ -13,7 +13,7 @@ impl Enumerated for bool {
 
 #[cfg(test)]
 mod tests {
-    use crate::{em_default, EnumMap, Enumerated};
+    use crate::{EnumMap, Enumerated, em_default};
 
     #[test]
     fn test_bool() {

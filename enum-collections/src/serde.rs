@@ -1,4 +1,4 @@
-use serde::{de::Visitor, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::Visitor};
 use std::{any::type_name, marker::PhantomData};
 
 use crate::{EnumMap, Enumerated};
@@ -23,11 +23,11 @@ struct EnumMapVisitor<
 }
 
 impl<
-        'de,
-        K: Enumerated + Deserialize<'de> + PartialEq,
-        V: Deserialize<'de> + Default,
-        const N: usize,
-    > Visitor<'de> for EnumMapVisitor<'de, K, V, N>
+    'de,
+    K: Enumerated + Deserialize<'de> + PartialEq,
+    V: Deserialize<'de> + Default,
+    const N: usize,
+> Visitor<'de> for EnumMapVisitor<'de, K, V, N>
 {
     type Value = EnumMap<K, V, N>;
 
@@ -57,11 +57,11 @@ impl<
 }
 
 impl<
-        'de,
-        K: Enumerated + Deserialize<'de> + PartialEq,
-        V: Deserialize<'de> + Default + 'de,
-        const N: usize,
-    > Deserialize<'de> for EnumMap<K, V, N>
+    'de,
+    K: Enumerated + Deserialize<'de> + PartialEq,
+    V: Deserialize<'de> + Default + 'de,
+    const N: usize,
+> Deserialize<'de> for EnumMap<K, V, N>
 {
     #[inline]
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

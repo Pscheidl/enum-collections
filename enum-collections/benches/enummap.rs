@@ -1,6 +1,6 @@
 use std::{collections::HashMap, hash::Hash};
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, black_box, criterion_group, criterion_main};
 use enum_collections::{EnumMap, Enumerated};
 
 #[derive(Enumerated, Eq, PartialEq, Hash)] // Enum derived to benchmark against the `enum-map` crate

@@ -385,7 +385,9 @@ impl<K: Enumerated, V, const N: usize> EnumMap<K, V, N> {
     ///
     /// ```
     #[cfg(feature = "variants")]
-    pub fn iter_kv_mut(&mut self) -> std::iter::Zip<std::slice::Iter<'_, K>, std::slice::IterMut<'_, V>> {
+    pub fn iter_kv_mut(
+        &mut self,
+    ) -> std::iter::Zip<std::slice::Iter<'_, K>, std::slice::IterMut<'_, V>> {
         K::VARIANTS.iter().zip(self.data.iter_mut())
     }
 
@@ -660,8 +662,8 @@ impl<K: Enumerated, V: Copy, const N: usize> Copy for EnumMap<K, V, N> {}
 
 #[cfg(test)]
 mod tests {
-    use crate::enummap::EnumMap;
     use crate::Enumerated;
+    use crate::enummap::EnumMap;
     /// No Debug derived on purpose, the crate must be usable without [std::fmt::Debug] derived
     /// for the enum.
     #[derive(Enumerated, Debug)]

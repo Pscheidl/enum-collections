@@ -1,9 +1,9 @@
 [package]
 name = "enum-collections-macros"
-version = "1.0.1"
-edition = "2021"
+version = "2.0.0"
+edition = "2024"
 
-description = "Macros to make EnumCollections easy to use"
+description = "Macros for the enum-collections EnumMap"
 authors = ["Pavel Pscheidl <pavel2@pscheidl.cz>"]
 readme = "README.md"
 repository = "https://github.com/Pscheidl/enum-collections"
@@ -21,6 +21,6 @@ default = []
 variants = []
 
 [dependencies]
-syn = "1.0"
+syn = "2.0"
 quote = "1.0"
 proc-macro2 = "1.0"
