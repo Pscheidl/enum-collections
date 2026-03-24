@@ -3,7 +3,7 @@ name = "enum-collections"
 version = "1.7.0"
 edition = "2021"
 
-description = "Collections data structures optimized for Enum, initializable at runtime."
+description = "EnumMap implemented in safe rust"
 authors = ["Pavel Pscheidl <pavel2@pscheidl.cz>"]
 readme = "../README.md"
 repository = "https://github.com/Pscheidl/enum-collections"
